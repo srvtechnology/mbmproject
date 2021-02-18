@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sales Executives Management</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+	<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="add-update section">
+	<div class="container-fluid">
+		<div class="add-update-div section-div">
+			<h4 class="h4">UPDATE <span>SALES EXECUTIVES</span></h4>
+      	<% users.forEach(function(usrprof){ %>
+			<form id="edit_form" action="/regReq/register_update" method="post">
+				<input type="hidden" name="_csrf-backend" value="lMFvBr9BvDuVt3KbMU7QH2032ayJFXWy0fy-7ugetLfu8yo23jL0X9qEIMt2F7ROWlao2sVhR_O3le6MolPu8Q==">
+				<input type="hidden" name="userId" value="<%= usrprof.USER_ID %>">
+				<input type="hidden" name="role" value="SE">
+				<input type="hidden" name="from" value="A">
+				<input type="hidden" name="adressfor" value="SB">
+				<input type="hidden" name="addressType" value="O">
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label for="firstname">First Name</label>
+							<input type="text" class="form-control" name="fname" value="<%= usrprof.FIRSTNAME %>" placeholder="firstname" required>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="lastname">Last Name</label>
+							<input type="text" class="form-control" name="lname" placeholder="lastname" value="<%= usrprof.LASTNAME %>" required>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="shopname">Shop/Company Name</label>
+							<input type="text" class="form-control" name="compnay" value="<%= usrprof.company %>" placeholder="Shop/Company Name">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="emailId">Email ID</label>
+							<input type="email" class="form-control"name="email1" value="<%= usrprof.EMAIL1 %>" placeholder="emailId">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="address" class="text-area">Address</label>
+							<textarea id="address" rows="3" name="address1" class="form-control" placeholder="address"><%= usrprof.ADDRESSLINE1 %></textarea>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="add-country">Country</label>
+							<select class="form-control" name="country" id="add-country" onchange="getState('edit_form')" required>
+								<option value="">Choose....</option>
+                <option value="<%= usrprof.COUNTRY %>" selected><%= usrprof.COUNTRY %></option>
+								<option value="China">China</option>
+								<option value="India">India</option>
+								<option value="USA">USA</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="add-state">State</label>
+							<select class="form-control" name="state" id="add-state" placeholder="Select State" onchange="getCity('edit_form')" required>
+              <option value="<%= usrprof.STATE %>" selected><%= usrprof.STATE %></option>
+              </select>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="add-city">City</label>
+							<select class="form-control" name="city" id="add-city" placeholder="Select City" required>
+              <option value="<%= usrprof.CITY %>" selected><%= usrprof.CITY %></option>
+            	</select>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="panNo">PAN card number</label>
+							<input type="text" class="form-control" name="panno" <%= usrprof.PANNO %> placeholder="enter pan number..">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="gstinNo">GSTIN Number</label>
+							<input type="text" class="form-control" name="gstin" value="<%= usrprof.gstin %>" placeholder="enter gstin number">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="mobileNo">Mobile Number</label>
+							<input type="text" name="mobile1" class="form-control" value="<%= usrprof.MOBILE1 %>" placeholder="mobileNo">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="phoneNo">Phone Number</label>
+							<input type="text" name="phone1" class="form-control" value="<%= usrprof.PHONE1 %>" placeholder="phoneNo">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="zipcode">Zipcode Code</label>
+							<input type="text" class="form-control" name="zipcode" value="<%= usrprof.ZIPCODE %>" placeholder="enter zipcode">
+						</div>
+					</div>
+					<div class="col-12">
+						<% if (userType == 'HOD' || userType == 'A') { %>
+			      <button type="submit" class="btn btn-success w-25">SUBMIT</button>
+						<% } %>
+					</div>
+				</div>
+			</form>
+      <% }); %>
+		</div>
+	</div>
+</div>
+</div>
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+
+function getState(formId){
+  var country=jQuery("#"+formId+" select[name='country']").val();
+  jQuery.ajax({
+  url: 'http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/regAct/getJurst/country/'+country,
+  //url: 'http://localhost:3000/regAct/getJurst/country/'+country,
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(result){
+    var obj=result.data;
+    jQuery("#"+formId+" select[name='state']").empty();
+    jQuery("#"+formId+" select[name='state']").append(jQuery("<option value=''></option>"));
+    jQuery.each(obj, function(key,value){
+    jQuery("#"+formId+" select[name='state']").append(jQuery("<option></option>").attr("value", value.identifier).text(value.displayname));
+    });
+  }
+});
+}
+function getCity(formId){
+  var state=jQuery("#"+formId+" select[name='state']").val();
+  jQuery.ajax({
+  url: 'http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/regAct/getJurst/state/'+state,
+//	url: 'http://localhost:3000/regAct/getJurst/state/'+state,
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(result){
+    var obj=result.data;
+    jQuery("#"+formId+" select[name='city']").empty();
+    jQuery("#"+formId+" select[name='city']").append(jQuery("<option value=''></option>"));
+    jQuery.each(obj, function(key,value){
+    jQuery("#"+formId+" select[name='city']").append(jQuery("<option></option>").attr("value", value.identifier).text(value.displayname));
+    });
+  }
+});
+}
+</script>
+</body>
+</html>

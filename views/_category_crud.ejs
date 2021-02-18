@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Category</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="add-update section">
+	<div class="container-fluid">
+		<div class="add-update-div section-div">
+			<h4 class="h4"><span>ADD CATEGORY </span></h4>
+			<form action="/category_cr_post"" method="post">
+				<input type="hidden" name="_csrf-backend" value="lMFvBr9BvDuVt3KbMU7QH2032ayJFXWy0fy-7ugetLfu8yo23jL0X9qEIMt2F7ROWlao2sVhR_O3le6MolPu8Q==">
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label for="identifier">Identifier</label>
+							<input type="text" class="form-control" id="identifier" name="identifier" placeholder="Identifier">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="name">Name</label>
+							<input type="text" class="form-control" id="name" name="name" placeholder="Name">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="type">Type</label>
+							<select class="form-control" name="type" id="type" required>
+								<option value="" selected>Choose...</option>
+								<option value="T">TopCategory</option>
+								<option value="S">SubCategory</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="desc">Description</label>
+							<input type="text" class="form-control" id="desc" name="desc" placeholder="Description">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="topcat">TopCategory</label>
+							<select class="form-control" name="topcat" id="topcat" required>
+								<option value="" selected>Choose...</option>
+								<% topcat.forEach(function(tcat){ %>
+								<option value="<%= tcat.TopCategoryId %>"><%= tcat.Name %></option>
+								<% }); %>
+							</select>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="subcat">SubCategory</label>
+							<select class="form-control" name="subcat" id="subcat" required>
+								<option value="" selected>None...</option>
+								<% subcat.forEach(function(scat){ %>
+								<option value="<%= scat.TopCategoryId %>"><%= scat.Name %></option>
+								<% }); %>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<button type="submit" class="btn btn-success w-25">SAVE</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+</body>
+</html>

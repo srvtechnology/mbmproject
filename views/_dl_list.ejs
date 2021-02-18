@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dealer List</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="dist-dealer-list section">
+	<div class="container-fluid">
+
+			<div class="d-flex justify-content-between mb-2">
+				<h4 class="h4">DEALER <span>LIST</span></h4>
+				<a href="/create_dl" class="btn btn-danger btn-create btn-sm">+ Create Dealer</a>
+			</div>
+			<div class="table-div" id="horizontalScroll">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Dealer</h4>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table id="basic-datatables" class="display table table-striped table-hover" >
+									<thead>
+										<tr>
+											<th>First Name</th>
+								      <th>Last Name</th>
+								      <th>Shop/Company Name</th>
+								      <th>Login ID</th>
+								      <th>Email ID</th>
+								      <th>Address</th>
+								      <th>Aadhar Number</th>
+								      <th>PAN Card No.</th>
+								      <th>GSTIN Number</th>
+								      <th>Mobile Number</th>
+								      <th>Phone Number</th>
+								      <th>Zip Code</th>
+								      <th>Status</th>
+								      <th class="action">Action</th>
+										</tr>
+									</thead>
+				<tbody>
+					<% users.forEach(function(user){ %>
+					<tr>
+						<td><%= user.FIRSTNAME %></td>
+						<td><%= user.LASTNAME %></td>
+						<td><%= user.company %></td>
+						<td><%= user.LOGON_ID1 %></td>
+						<td><%= user.EMAIL1 %></td>
+						<td><%= user.ADDRESS %> </td>
+						<td><%= user.AADHAARID %></td>
+						<td><%= user.PANNO %></td>
+						<td><%= user.gstin %></td>
+						<td><%= user.MOBILE1 %></td>
+						<td><%= user.PHONE1 %></td>
+						<td><%= user.ZIPCODE %></td>
+						<td>
+							<% switch (user.STATUS) {
+								case '1' : %>
+							<a href="#" class="btn btn-primary btn-sm">Active</a>
+							<% break;
+							case '0' : %>
+						<a href="#" class="btn btn-primary btn-sm">In-Active</a>
+						<% break;
+						} %>
+						</td>
+						<td>
+							<a href="/edit_dl/id/<%= user.USER_ID %>" class="btn btn-dark btn-sm">View</a>
+						</td>
+					</tr>
+					<% }); %>
+
+			</tbody>
+			</table>
+			</div>
+			</div>
+			</div>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+(function() {
+    function scrollHorizontally(e) {
+        e = window.event || e;
+        var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+        document.getElementById('horizontalScroll').scrollLeft -= (delta * 40); // Multiplied by 40
+        e.preventDefault();
+    }
+    if (document.getElementById('horizontalScroll').addEventListener) {
+        // IE9, Chrome, Safari, Opera
+        document.getElementById('horizontalScroll').addEventListener('mousewheel', scrollHorizontally, false);
+        // Firefox
+        document.getElementById('horizontalScroll').addEventListener('DOMMouseScroll', scrollHorizontally, false);
+    } else {
+        // IE 6/7/8
+        document.getElementById('horizontalScroll').attachEvent('onmousewheel', scrollHorizontally);
+    }
+})();
+
+$(document).ready(function() {
+	$('#basic-datatables').DataTable({
+	});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Distributor List</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="dist-dealer-list section">
+	<div class="container-fluid">
+		<div class="dist-dealer-list-div section-div">
+			<form action="/users_dtByName" method="post">
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<input type="text" class="form-control" id="identifier" name="name" placeholder="Search">
+						</div>
+						<div class="col-12">
+
+								<button type="submit" class="btn btn-success w-25">SEARCH</button>
+
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="d-flex justify-content-between mb-2">
+				<h4 class="h4">DISTRIBUTER <span>LIST</span></h4>
+				<a href="/create_dt" class="btn btn-danger btn-create btn-sm">+ Create Distributer</a>
+			</div>
+			<div class="table-div" id="horizontalScroll">
+				<table class="table table-striped">
+				<thead class="thead-light">
+					<tr>
+						<th scope="col">First Name</th>
+						<th scope="col">Last Name</th>
+						<th scope="col">Shop/Company Name</th>
+						<th scope="col">Login ID</th>
+						<th scope="col">Email ID</th>
+						<th scope="col">Address</th>
+						<th scope="col">Aadhar Number</th>
+						<th scope="col">PAN Card No.</th>
+						<th scope="col">GSTIN Number</th>
+						<th scope="col">Mobile Number</th>
+						<th scope="col">Phone Number</th>
+						<th scope="col">Zip Code</th>
+						<th scope="col" class="action">Status</th>
+						<th scope="col" class="action">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% users.forEach(function(user){ %>
+					<tr>
+						<td><%= user.FIRSTNAME %></td>
+						<td><%= user.LASTNAME %></td>
+						<td><%= user.company %></td>
+						<td><%= user.LOGON_ID1 %></td>
+						<td><%= user.EMAIL1 %></td>
+						<td><%= user.ADDRESS %> </td>
+						<td><%= user.AADHAARID %></td>
+						<td><%= user.PANNO %></td>
+						<td><%= user.gstin %></td>
+						<td><%= user.MOBILE1 %></td>
+						<td><%= user.PHONE1 %></td>
+						<td><%= user.ZIPCODE %></td>
+						<td>
+							<% switch (user.STATUS) {
+								case '1' : %>
+							<a href="#" class="btn btn-primary btn-sm">Active</a>
+							<% break;
+							case '0' : %>
+						<a href="#" class="btn btn-primary btn-sm">In-Active</a>
+						<% break;
+						} %>
+						</td>
+						<td>
+							<a href="/edit_dt/id/<%= user.USER_ID %>" class="btn btn-dark btn-sm">View</a>
+						</td>
+					</tr>
+					<% }); %>
+				</tbody>
+			</table>
+			</div>
+			<div class="pagination">
+  <a href="/users_dt/pageNo/1">&laquo;</a>
+  <a href="/users_dt/pageNo/1" class="active">1</a>
+  <a href="/users_dt/pageNo/2">2</a>
+  <a href="/users_dt/pageNo/3">3</a>
+  <a href="/users_dt/pageNo/4">4</a>
+  <a href="/users_dt/pageNo/5">5</a>
+  <a href="/users_dt/pageNo/6">6</a>
+  <a href="/users_dt/pageNo/7">&raquo;</a>
+</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+(function() {
+    function scrollHorizontally(e) {
+        e = window.event || e;
+        var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+        document.getElementById('horizontalScroll').scrollLeft -= (delta * 100); // Multiplied by 40
+        e.preventDefault();
+    }
+    if (document.getElementById('horizontalScroll').addEventListener) {
+        // IE9, Chrome, Safari, Opera
+        document.getElementById('horizontalScroll').addEventListener('mousewheel', scrollHorizontally, false);
+        // Firefox
+        document.getElementById('horizontalScroll').addEventListener('DOMMouseScroll', scrollHorizontally, false);
+    } else {
+        // IE 6/7/8
+        document.getElementById('horizontalScroll').attachEvent('onmousewheel', scrollHorizontally);
+    }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Category</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="add-update section">
+	<div class="container-fluid">
+		<div class="add-update-div section-div">
+			<h4 class="h4"><span>UPDATE PRICE </span></h4>
+			<form action="/price_upd_post" method="post">
+				<% priceList.forEach(function(price){ %>
+				<input type="hidden" name="_csrf-backend" value="lMFvBr9BvDuVt3KbMU7QH2032ayJFXWy0fy-7ugetLfu8yo23jL0X9qEIMt2F7ROWlao2sVhR_O3le6MolPu8Q==">
+        <input type="hidden" name="id" value="<%= price.PRODUCTCONF_ID %>">
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label for="name">Procut Name</label>
+							<input type="text" class="form-control" id="name" value="<%= price.NAME %>" name="name" disabled>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="listprice">List Price</label>
+							<input type="number" class="form-control" id="listprice" value="<%= price.LISTPRICE %>" name="listprice" placeholder="Listprice">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="offerprice">Offer Price</label>
+							<input type="number" class="form-control" id="offerprice" value="<%= price.OFFERPRICE %>" name="offerprice" placeholder="Offerprice">
+						</div>
+					</div>
+					<div class="col-12">
+						<% if (userType == 'HOD' || userType == 'A') { %>
+						<button type="submit" class="btn btn-success w-25">SAVE</button>
+						<% } %>
+					</div>
+				</div>
+				<% }); %>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+</body>
+</html>

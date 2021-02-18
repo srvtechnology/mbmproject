@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Products</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="product section">
+	<div class="container-fluid">
+		<div class="product-div section-div">
+			<form action="/productsByName" method="post">
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<input type="text" class="form-control" id="identifier" name="name" placeholder="Search">
+						</div>
+						<div class="col-12">
+
+								<button type="submit" class="btn btn-success w-25">SEARCH</button>
+
+						</div>
+					</div>
+				</div>
+			</form>
+			<h4 class="h4">LATEST <span>PRODUCTS</span></h4>
+			<div class="resp-row">
+				<% if (prdList) { %>
+	        <% prdList.forEach(function(product){ %>
+						<div class="res-col-4">
+							<a href="/productdtl/<%= product.PRODUCT_ID %>">
+								<img src="/images/products/<%= product.THUMBNAIL %>" alt="<%= product.NAME %>">
+								<p><%= product.NAME %></p>
+							</a>
+						</div>
+						<% }); %>
+						<% } %>
+
+			</div>
+			<div class="pagination">
+  <a href="/products/pageNo/1">&laquo;</a>
+  <a href="/products/pageNo/1" class="active">1</a>
+  <a href="/products/pageNo/2">2</a>
+  <a href="/products/pageNo/3">3</a>
+  <a href="/products/pageNo/4">4</a>
+  <a href="/products/pageNo/5">5</a>
+  <a href="/products/pageNo/6">6</a>
+  <a href="/products/pageNo/7">&raquo;</a>
+</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+</body>
+</html>

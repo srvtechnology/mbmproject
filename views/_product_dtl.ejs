@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product Details</title>
+<meta name="viewport"content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon"href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet"href="/stylesheets/navbar.css">
+<link rel="stylesheet"href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+	<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="product-des section">
+	<div class="container-fluid">
+		<div class="product-des-div section-div">
+			<h4 class="h4">PRODUCTS <span>DESCRIPTION</span></h4>
+			<% if (prdList) { %>
+			  <% prdList.forEach(function(product){ %>
+					<% if (userType == 'HOD' || userType == 'A') { %>
+ 				 <a href="/productedit/<%= product.PRODUCT_ID %>" class="btn btn-danger btn-create btn-sm">Edit</a>
+ 				 <% } %>
+
+				<div class="prod-info-row">
+					<div class="prod-img-div">
+						<img src="/images/products/<%= product.THUMBNAIL %>"alt="<%= product.NAME %>"class="prod-img">
+					</div>
+					<div class="border-line"></div>
+					<div class="prod-info">
+						<h5 class="h5"><%= product.NAME %></h5>
+						<p><b>Product Code: </b>MBM001</p>
+						<p><b>Reward Points: </b>0</p>
+						<p><b>Availability: </b>Last <%= product.INVENTORY %> only</p>
+						<div class="price">
+							<b>Price:</b>
+							<p class="col-red">₹  <%= product.OFFERPRICE %></p>
+							<p class="stirked">₹  <%= product.LISTPRICE %></p>
+						</div>
+						<i class="dropdown-divider d-block"></i>
+						<div class="form-group d-flex justify-content-between">
+					    <label for="quantity" class="quant">Quantity: </label>
+					    <input type="number" class="form-control w-50" min="1" step="1" value="1" id="quantity" placeholder="Enter quantity...">
+					  </div>
+						<h6 class="h6">Accessories</h6>
+						<% spList.forEach(function(sp){ %>
+						<div class="btn-group btn-group-toggle w-100 mt-2">
+					    <input value="sd" type="radio" name="leg" id="option1" checked>
+						  <label class="btn-sm btn btn-secondary active" for="option1">
+						    With <%= sp.NAME %> (+₹<%= sp.PRICE %>)
+						  </label>
+					    <input value="sd" type="radio"name="leg" id="option2">
+						  <label class="btn-sm btn btn-secondary" for="option2">
+						    No <%= sp.NAME %>
+						  </label>
+						</div>
+						<% }); %>
+						<i class="dropdown-divider d-block"></i>
+						<% switch (userType) {
+							case 'SE' : %>
+							<form id="orderaction" method="post" action="/addToCart" class="form-inline">
+							<p>&nbsp;</p>
+								<input type="hidden"  id="prdId" name="prdId" value="<%= product.PRODUCT_ID %>">
+								<input type="hidden"  id="price" name="price" value="<%= product.OFFERPRICE %>">
+								<input type="hidden"  id="total" name="total" value="<%= product.OFFERPRICE %>">
+								<input type="hidden"  id="spid" name="spid" value="0">
+							<input type="hidden" id="qtyID" name="qty" value="1" class="span1" >
+							<button type="submit" class="btn btn-success w-50">Order now!</button>
+						 </form>
+							 <% break;
+
+							case 'DL' : %>
+							<form id="orderaction" method="post" action="/addToCart" class="form-inline">
+							<p>&nbsp;</p>
+								<input type="hidden"  id="prdId" name="prdId" value="<%= product.PRODUCT_ID %>">
+								<input type="hidden"  id="price" name="price" value="<%= product.OFFERPRICE %>">
+								<input type="hidden"  id="total" name="total" value="<%= product.OFFERPRICE %>">
+								<input type="hidden"  id="spid" name="spid" value="0">
+							<input type="hidden" id="qtyID" name="qty" value="1" class="span1" >
+							<button type="submit" class="btn btn-success w-50">Order now!</button>
+						 </form>
+							<% break;
+
+							case 'DT' : %>
+							<form id="orderaction" method="post" action="/addToCart" class="form-inline">
+							<p>&nbsp;</p>
+								<input type="hidden"  id="prdId" name="prdId" value="<%= product.PRODUCT_ID %>">
+								<input type="hidden"  id="price" name="price" value="<%= product.OFFERPRICE %>">
+								<input type="hidden"  id="total" name="total" value="<%= product.OFFERPRICE %>">
+								<input type="hidden"   id="spid" name="spid" value="0">
+							<input type="hidden" id="qtyID" name="qty" value="1" class="span1" >
+							<button type="submit" class="btn btn-success w-50">Order now!</button>
+						 </form>
+							<% break;
+						} %>
+					</div>
+				</div>
+				<i class="dropdown-divider d-block"></i>
+				<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+				  <li class="nav-item ">
+				    <a class="nav-link active btn-sm" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Description</a>
+				  </li>
+				  <li class="nav-item">
+				    <a class="nav-link btn-sm" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Additional Information</a>
+				  </li>
+				</ul>
+				<div class="tab-content" id="pills-tabContent">
+				  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+				  	<%= product.DESCRIPTION %>
+				  </div>
+				  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+				  	<table class="table table-striped">
+						  <thead class="thead-light">
+						    <tr>
+						      <th scope="col">Name</th>
+						      <th scope="col">	Desc</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+								<% spList.forEach(function(sp){ %>
+									<tr>
+									 <th scope="row"><%= sp.NAME %></th>
+									 <td><%= sp.DESCRIPTION %></td>
+								 </tr>
+							    <% }); %>
+						  </tbody>
+						</table>
+				  </div>
+				</div>
+				<% }); %>
+		    <% } %>
+		</div>
+	</div>
+</div>
+</div>
+<!-- Bootstrap JS -->
+<!--<script src="/javascripts/bootstrap.js"></script>-->
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+</body>
+</html>

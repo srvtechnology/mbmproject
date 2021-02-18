@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Order View</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+	<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="order-view section">
+	<div class="container-fluid">
+		<div class="product-div section-div">
+			<h4 class="h4">ORDER <span>VIEW</span></h4>
+				<table class="table">
+				  <thead class="thead-light">
+				    <tr>
+				      <th scope="col">SL No:</th>
+				      <th scope="col">Image</th>
+				      <th scope="col">Product Name</th>
+							<th scope="col">Spare Name</th>
+				      <th scope="col">Quantity</th>
+				      <th scope="col">Unit price</th>
+							<th scope="col">Spare Total</th>
+				      <th scope="col">Total</th>
+				      <th scope="col">Action</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+						<% cartList.forEach(function(cart){ %>
+							<tr>
+						 	 <!-- 1 -->
+						 	 <td><%=cart.CARTDTL_ID %></td>
+						 	 <!-- 2 -->
+						 	 <td>
+						 		 <img src="/images/products/<%= cart.THUMBNAIL %>"alt="<%= cart.NAME %>" class="prod-img img-fluid" width="50">
+						 	 </td>
+						 	 <!-- 3 -->
+						 	 <td><%= cart.NAME %></td>
+							 <td><%= pspare_dtl %></td>
+						 	 <!-- 4 -->
+						 	 <td class="">
+						 		 <div class="form-group">
+						 			 <input type="number" id="qty_input_<%= cart.CARTDTL_ID %>" step="1" placeholder="1" min="1" class="form-control text-center mx-auto" value="<%= cart.QTY %>"
+									 onchange="updateCart('<%= cart.PRODUCT_ID %>','<%= cart.OFFERPRICE %>','<%= cart.CART_ID %>','<%= cart.CARTDTL_ID %>')">
+						 		 </div>
+						 	 </td>
+						 	 <!-- 5 -->
+						 	 <td>₹ &nbsp;<%= cart.OFFERPRICE %></td>
+						 	 <!-- 6 -->
+							 <td>₹ &nbsp;<%= cart.SPARETOTAL %></td>
+						 	 <td>₹ &nbsp;<%= cart.TOTAL %></td>
+						 	 <!-- 7 -->
+						 	 <td>
+						 		 <a class="btn btn-sm btn-danger" href="/deleteCartItem/cartId/<%=cart.CART_ID %>/cartDtlId/<%=cart.CARTDTL_ID %>">
+						 			 <i class="fa fa-trash" aria-hidden="true"></i>
+						 		 </a>
+						 	 </td>
+						  </tr>
+							<% }); %>
+							<tr>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td><strong>₹ &nbsp;<%= csubtotal %></strong></td>
+							</tr>
+				  </tbody>
+				</table>
+				<hr>
+				<p class="cart-total right">
+				<strong>Sub-Total</strong>:	₹ &nbsp;<%= csubtotal %><br>
+				<strong>GST (17.5%)</strong>: ₹ &nbsp;<%= cvat %><br>
+				<strong>Total</strong>: ₹ &nbsp;<%= ctotal %><br>
+				</p>
+				<hr/>
+				<p class="buttons center">
+				<input type="hidden" id="cartid" name="cartid" value="<%= cartid %>"/>
+				<input type="hidden" id="userTypeId" name="userType" value="<%= userType %>"/>
+				<input type="hidden" id="userId" name="userId" value="<%= userId %>"/>
+				<% if (userType == 'SE') { %>
+				<label for="dldtId" class="form-control">Select Dealer/Distributor</label>
+				<select class="form-control" id="dldtId" name="dldt" placeholder="Dealer/Distributor" required>
+				  <option value="">Choose</option>
+				    <% dldtList.forEach(function(dldt){ %>
+				      <option value="<%= dldt.USER_ID %>"><%= dldt.LOGON_ID1 %></option>
+				      <% }); %>
+				</select>
+				<% } %>
+				<button class="btn btn-success" type="button" onclick="checkout()" id="checkout">Order Now</button>
+				</p>
+				<div id="dialog-1" title="Member Selection">Please select Dealer/Disrtibutior</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script>
+$(document).ready(function() {
+  $(function() {
+             $( "#dialog-1" ).dialog({
+                autoOpen: false,
+             });
+          });
+});
+
+function checkout(){
+  var cartId=jQuery('#cartid').val();
+  var userType=jQuery('#userTypeId').val();
+  var memberFor=jQuery('#userId').val();
+  if(userType=='SE'){
+    var memberFor=jQuery('#dldtId').val();
+    if(memberFor == undefined || memberFor==''){
+    $( "#dialog-1").dialog( "open" );
+    }
+  }
+  jQuery.ajax({
+ url: 'http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/regAct/place_order/cartId/'+cartId+'/memberFor/'+memberFor,
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(result){
+    document.location.href = "/orders";
+    }
+  });
+}
+function updateCart(prdId,price,cartId,cartdtlId){
+	console.log("hii")
+var qty=jQuery('#qty_input_'+cartdtlId).val();
+  jQuery.ajax({
+  url: 'http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/regAct/updateCart/prd/'+prdId+'/qty/'+qty+'/price/'+price+'/cartId/'+cartId+'/cartDtlId/'+cartdtlId,
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(result){
+    document.location.href = "/cart";
+    }
+});
+}
+</script>
+</body>
+</html>

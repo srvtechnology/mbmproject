@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Order Details</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="order-view section">
+	<div class="container-fluid">
+		<div class="product-div section-div">
+			<h4 class="h4">ORDER <span>VIEW</span></h4>
+			<div class="row" style="margin-top:5px; padding:5px !important">
+				<div class="col-4">
+					<strong>Order Place By:</strong>
+					<div class="column">
+						<p id="order_placed_by"></p>
+						<p id="user_role_by"></p>
+					</div>
+				</div>
+				<div class="col-4">
+					<strong>Order Placed For:</strong>
+					<div class="column">
+						<p id="order_placed_for"></p>
+						<p id="user_role_for"></p>
+					</div>
+				</div>
+				
+			</div>
+			
+				<table class="table">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col">OrderItem Id</th>
+							<th scope="col">Order Id</th>
+							<th scope="col">Image</th>
+							<th scope="col">Product Name</th>
+							<th scope="col">Spare Name</th>
+							<th scope="col">Quantity</th>
+							<th scope="col">Unit price</th>
+							<th scope="col">Spare Total</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% orderList.forEach(function(ord){ %>
+							<tr>
+							 <!-- 1 -->
+							 <td><%=ord.ORDERITEM_ID %></td>
+							 <td><%=ord.ORDER_ID %></td>
+							 <!-- 2 -->
+							 <td>
+								 <img src="/images/products/<%= ord.THUMBNAIL %>"alt="<%= ord.NAME %>" class="prod-img img-fluid" width="50">
+							 </td>
+							 <!-- 3 -->
+							 <td><%= ord.NAME %></td>
+							 <td><%= pspare_dtl %></td>
+							 <!-- 4 -->
+							 <td class="">
+								 <div class="form-group">
+									 <input type="number" id="quantity" step="1" placeholder="1" min="1" class="form-control text-center mx-auto" value="<%= ord.QUANTITY %>" disabled/>
+								 </div>
+							 </td>
+							 <!-- 5 -->
+							 <td>₹ &nbsp;<%= ord.OFFERPRICE %></td>
+							 <!-- 6 -->
+							 <td>₹ &nbsp;<%= ord.SPARETOTAL %></td>
+							 <td>₹ &nbsp;<%= ord.TOTAL %></td>
+							 <!-- 7 -->
+							</tr>
+							<% }); %>
+							<tr>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td><strong>₹ &nbsp;<%= csubtotal %></strong></td>
+							</tr>
+					</tbody>
+				</table>
+				<hr>
+				<p class="cart-total right">
+				<strong>Sub-Total</strong>:	₹ &nbsp;<%= csubtotal %><br>
+				<strong>GST (17.5%)</strong>: ₹ &nbsp;<%= cvat %><br>
+				<strong>Total</strong>: ₹ &nbsp;<%= ctotal %><br>
+				</p>
+				
+					
+				
+				<hr/>
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+	var data = <%-JSON.stringify(orderList)%>;
+	console.log(data[0].MEMBER_ID);
+	console.log(data[0].MEMBER_ID_FOR);
+
+	
+	setTimeout(memderIdDetail, 1000);
+	setTimeout(memderIdForDetail, 1000);
+
+	function memderIdDetail(){
+		console.log('in by');
+		$(document).ready(function(){
+	$.ajax({ url: "http://localhost:8080/regAct/getMemberDetails/memberid/"+data[0].MEMBER_ID,
+        context: document.body,
+        success: function(result){
+			console.log(result.data);
+			$('#order_placed_by').html(result.data[0].FIRSTNAME+ ' '+result.data[0].LASTNAME);
+			$('#user_role_by').html(result.roledetails[0].NAME);
+        //    alert("done");
+        }});
+	});
+	}
+
+	function memderIdForDetail() {
+		console.log('in for');
+		$(document).ready(function(){
+	$.ajax({ url: "http://localhost:8080/regAct/getMemberDetails/memberid/"+data[0].MEMBER_ID_FOR,
+        context: document.body,
+        success: function(result){
+			console.log(result.data);
+			$('#order_placed_for').html(result.data[0].FIRSTNAME+ ' '+result.data[0].LASTNAME);
+			$('#user_role_for').html(result.roledetails[0].NAME);
+        }});
+	});
+	}
+
+</script>
+</body>
+</html>

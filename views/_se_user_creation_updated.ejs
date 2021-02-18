@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+<style>
+#sidebar.active {
+
+	/*margin-left: -250px;*/
+}
+
+.choose-img-file.d-none {
+	display: none !important;
+}
+
+.hide1 {
+	display: none !important;
+}
+
+.custom-file-label {
+	overflow: hidden;
+}
+
+.custom-file-input {
+	width: 100%;
+	z-index: 9;
+}
+
+.add-update form .row>div>div input,
+.add-update form .row>div>div textarea,
+.add-update form .row>div>div select {
+	width: 60%;
+	position: relative;
+}
+.res-col-4{
+	padding: 0;
+	margin-bottom: 0;
+}
+.res-col-4 p{
+	font-size: 10px;
+	line-height: 10px;
+	margin: 10px 0 0;
+}
+.go-cat-row{
+height: 65vh;
+overflow-y: scroll;
+margin: 0 -5px;
+}
+#catModal>div{
+	max-width: 80vw;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.res-col-4 .btn-group1{
+	display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.res-col-4 .btn-group1 button{
+width: 55%;
+}
+.res-col-4 .btn-group1.productAdded button.btn.btn-danger{
+	color: #fff;
+	background-color: #28a745;
+	border-color: #28a745;
+}
+.res-col-4 .btn-group1 input{
+width: 43%;
+}
+.bottom-cat {
+
+}
+.bottom-cat > div{
+	padding-top: 10px;
+display: flex;
+justify-content: space-between;
+}
+.bottom-cat h5{
+	width: 40%;
+	text-align: left;
+	font-weight: 600;
+	align-self: center;
+	margin: 0;
+}
+.bottom-cat input{
+	width: 60%;
+	background-color: #fff !important;
+}
+@media only screen and (max-width: 500px) {
+#catModal>div{
+	max-width: 95vw;
+}
+}
+</style>
+</head>
+<body>
+	<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="add-update section">
+	<div class="container-fluid">
+		<div class="add-update-div section-div">
+			<h4 class="h4">ADD <span>LEAD</span></h4>
+			<form id="create_dl_form" action="/regReq/register_se" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_csrf-backend" value="lMFvBr9BvDuVt3KbMU7QH2032ayJFXWy0fy-7ugetLfu8yo23jL0X9qEIMt2F7ROWlao2sVhR_O3le6MolPu8Q==">
+				<input type="hidden" name="userId" value="">
+				<input type="hidden" name="from" value="SE">
+				<input type="hidden" name="adressfor" value="SB">
+				<input type="hidden" name="addressType" value="O">
+				<div class="row">
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="userType">User Type</label>
+							<select id="userType" name="role" class="form-control enquery-select" onclick="this.value === 'other' ? $('body .exe-comment').show() : $('body .exe-comment').hide()">
+                <option value="" selected>Choose....</option>
+                <option value="DL">Dealer</option>
+                <option value="DT">Distributor</option>
+                <option value="OT">Other</option>
+                <option value="ST">Store</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="firstname">First Name</label>
+							<input type="text" class="form-control" name="fname" placeholder="firstname" required>
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="lastname">Last Name</label>
+							<input type="text" class="form-control" name="lname" placeholder="lastname" required>
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="shopname">Shop/Company Name</label>
+							<input type="text" id="shopname" class="form-control" name="compnay" placeholder="Organization">
+						</div>
+					</div>
+				<!--	<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="loginId">Login ID</label>
+							<input type="text" class="form-control" name="logonId" placeholder="loginId">
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="password1">Password</label>
+							<input type="text" class="form-control" name="password" placeholder="Passw0rd">
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="password2">Confirm Password</label>
+							<input type="text" class="form-control" name="password" placeholder="Passw0rd">
+						</div>
+					</div>-->
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="emailId">Email ID</label>
+							<input type="text" class="form-control" name="email1" placeholder="emailId">
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="address" class="text-area">Address</label>
+							<textarea name="address" id="address" rows="3" name="address1" class="form-control" placeholder="address"></textarea>
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="country">Country</label>
+							<select class="form-control" name="country" id="country" onchange="getState('create_dl_form')" required>
+								<option value="1" selected disabled>Choose...</option>
+                <option value="China">China</option>
+								<option value="India">India</option>
+								<option value="USA">USA</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+              <label for="add-state">State</label>
+							<select class="form-control" name="state" id="add-state" placeholder="Select State" onchange="getCity('create_dl_form')" required>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+              <label for="add-city">City</label>
+							<select class="form-control" name="city" id="add-city" placeholder="Select City" required>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="panNo">PAN card number</label>
+							<input type="text" class="form-control" name="panno" placeholder="enter pan number..">
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="gstinNo">GSTIN Number</label>
+							<input type="text" class="form-control" placeholder="enter gstin number">
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="mobileNo">Mobile Number</label>
+							<input type="text" class="form-control" placeholder="mobileNo">
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="phoneNo">Phone Number</label>
+							<input type="text" class="form-control" placeholder="phoneNo">
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label for="zipcode">ZIP Code</label>
+							<input type="text" class="form-control" placeholder="enter zipcode">
+						</div>
+					</div>
+					<div class="col-md-6 col-12 exe-comment" style="display: none;">
+						<div class="form-group">
+							<label for="exeComment">Exectutive Comment</label>
+							<textarea id="exeComment" style="height: auto !important;" rows="5" class="form-control"></textarea>
+						</div>
+					</div>
+					<!-- modal search + product -->
+					<div class="col-12 d-flex">
+						<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#catModal">Go to catalogue</button>
+					</div>
+					<!-- checkbox -->
+					<div class="col-12 d-flex">
+						<div class="form-group mb-0">
+							<input type="checkbox" class="form-control" id="newProEnq" style="width: auto;">
+							<label for="newProEnq" class="align-self-center mb-0 ml-2 font-weight-bold w-100">New Product Enquiry</label>
+						</div>
+					</div>
+					<!-- condition photo 3,5 -->
+					<div class="col-12 d-flex choose-img-file d-none">
+						<div class="card p-2 pt-2 pb-1 mb-2">
+						<!-- <div class=""> -->
+							<div class="row">
+								<div class="col-md-4 col-12">
+									<div class="input-group mb-0 mt-2">
+									  <div class="custom-file">
+									    <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+									    <label class="custom-file-label w-100" for="inputGroupFile01">Choose file</label>
+									  </div>
+									</div>
+								</div>
+								<div class="col-md-4 col-12">
+									<div class="input-group mb-0 mt-2">
+									  <div class="custom-file">
+									    <input type="file" class="custom-file-input" id="inputGroupFile02" aria-describedby="inputGroupFileAddon02">
+									    <label class="custom-file-label w-100" for="inputGroupFile02">Choose file</label>
+									  </div>
+									</div>
+								</div>
+								<div class="col-md-4 col-12">
+									<div class="input-group mb-0 mt-2">
+									  <div class="custom-file">
+									    <input type="file" class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03">
+									    <label class="custom-file-label w-100" for="inputGroupFile03">Choose file</label>
+									  </div>
+									</div>
+								</div>
+								<div class="col-md-4 col-12 add-img-file d-flex mt-2">
+									<button type="button" class="btn btn-danger btn-sm">+ Add more files</button>
+								</div>
+								<div class="col-md-4 col-12 file-vali" style="display: none;">
+									<div class="input-group mb-0 mt-2">
+									  <div class="custom-file">
+									    <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+									    <label class="custom-file-label w-100" for="inputGroupFile04">Choose file</label>
+									  </div>
+									</div>
+								</div>
+								<div class="col-md-4 col-12 file-vali" style="display: none;">
+									<div class="input-group mb-0 mt-2">
+									  <div class="custom-file">
+									    <input type="file" class="custom-file-input" id="inputGroupFile05" aria-describedby="inputGroupFileAddon05">
+									    <label class="custom-file-label w-100" for="inputGroupFile015">Choose file</label>
+									  </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 bottom-hide d-none">
+						<div class="form-group">
+							<label for="enquiryType">Enquiry Type</label>
+							<select type="text" class="form-control" id="enquiryType">
+								<option value="1" selected disabled>Choose...</option>
+								<option value="hot">Hot</option>
+								<option value="warn">Warn</option>
+								<option value="cold">Cold</option>
+								<option value="prospects">Prospects</option>
+								<option value="closed">Closed</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6 col-12 bottom-hide d-none">
+						<div class="form-group">
+							<label for="productQuantity">Product Quantity</label>
+							<input type="text" id="productQuantity" class="form-control">
+						</div>
+					</div>
+					<div class="col-md-6 col-12 bottom-hide d-none">
+						<div class="form-group">
+							<label for="cusNeoPrice">Customer Negotiation Price per piece</label>
+							<input type="text" id="cusNeoPrice" class="form-control">
+						</div>
+					</div>
+					<div class="col-md-6 col-12 bottom-hide d-none">
+						<div class="form-group">
+							<label for="visitDate">Visit Date</label>
+							<input type="date" id="visitDate" class="form-control">
+						</div>
+					</div>
+					<div class="col-12">
+						<button type="submit" class="btn btn-success w-25">SUBMIT</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="catModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+>
+<!-- style="display: block; opacity: 1;" -->
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5 class="modal-title" id="exampleModalLabel">Go to catalogue</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        	<div class="form-group">
+        		<input type="text" class="form-control" placeholder="Search">
+        	</div>
+        	<div class="row go-cat-row border pt-2 pb-3">
+          <% prdList.forEach(function(product){ %>
+            <div class="col-md-3 col-4 p-2">
+							<div class="res-col-4 w-100">
+								<a href="#">
+									<img src="/images/products/<%= product.THUMBNAIL %>" alt="<%= product.NAME %>">
+									<p><%= product.NAME %></p>
+                  <p class="col-red">₹  <%= product.OFFERPRICE %></p>
+									<p class="stirked">₹  <%= product.LISTPRICE %></p>
+								</a>
+								<div class="btn-group1 mt-2">
+									<button class="btn btn-danger btn-sm">Add</button>
+									<input type="number" class="form-control btn-sm" placeholder="Quantity" min="1" disabled>
+								</div>
+							</div>
+        		</div>
+            <% }); %>
+        	</div>
+        	<div class="row bottom-cat">
+        		<div class="col-md-6 col-6">
+        			<h5>Total: </h5>
+        			<input type="text" readonly class="form-control" id="totalProductPrice">
+        		</div>
+        		<div class="col-md-6 col-6">
+        			<h5>Quantity: </h5>
+        			<input type="text" readonly class="form-control">
+        		</div>
+            <div class="col-md-6 col-6">
+              <label for="enquiryType">Enquiry Type</label>
+							<select type="text" class="form-control" id="enquiryType">
+								<option value="1" selected disabled>Choose...</option>
+								<option value="hot">Hot</option>
+								<option value="warn">Warn</option>
+								<option value="cold">Cold</option>
+								<option value="prospects">Prospects</option>
+								<option value="closed">Closed</option>
+							</select>
+        		</div>
+            <div class="col-md-6 col-6">
+              <label for="cusNeoPrice">Customer Negotiation Price per piece</label>
+              <input type="text" id="cusNeoPrice" class="form-control">
+        		</div>
+            <div class="col-md-6 col-6">
+              <label for="visitDate">Visit Date</label>
+              <input type="date" id="visitDate" class="form-control">
+        		</div>
+
+        	</div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">X</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<script src="/javascripts/app.js"></script>
+<script>
+$("#newProEnq").on("change", function() {
+	if ($(this).is(":checked")) {
+	  $(".choose-img-file").removeClass("d-none");
+	  $(".bottom-hide").removeClass("d-none");
+	} else {
+	  $(".choose-img-file").addClass("d-none");
+	  $(".file-vali").hide();
+		$(".add-img-file").removeClass("hide1");
+	  $(".bottom-hide").addClass("d-none");
+	}
+});
+// add img file
+$(".add-img-file button").on("click", function() {
+	$(".file-vali").show();
+	$(".add-img-file").addClass("hide1");
+});
+// FILE UPLOAD NAME
+$('body .custom-file-input').on('change',function(){
+    var fileName = $(this).val();
+    $(this).next('.custom-file-label').html(fileName);
+});
+</script>
+</body>
+</html>

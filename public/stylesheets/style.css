@@ -1,0 +1,457 @@
+html {
+	overflow-x: hidden;
+	scroll-behavior: smooth
+}
+
+body {
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+	text-align: center;
+	font-family: roboto, sans-serif;
+	padding: 10px;
+	margin: auto;
+	max-width: 800px;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;	/*transition: ease-in-out all .3s*/
+}
+
+a:hover,
+a {
+	text-decoration: none;
+	color: initial
+}
+
+/*********
+GLOBAL
+*********/
+.d-flex {
+	display: flex;
+}
+
+.header {
+}
+
+.header h4 {
+	display: inline-block;
+	margin-right: -5%;
+	transform: translateX(5%);
+	font-size: 20px;
+}
+
+.header p {
+	display: inline-block;
+	float: right;
+	margin-right: 5%;
+	font-style: italic;
+	font-weight: 700;
+	font-size: 13px;
+	margin-top: 1vh;
+}
+
+.border {
+	border: 2px solid #111;
+}
+
+.b-l {
+	border-left: 1px solid #111;
+}
+
+.b-r {
+	border-right: 1px solid #111;
+}
+
+.b-t {
+	border-top: 1px solid #111;
+}
+
+.b-b {
+	border-bottom: 1px solid #111;
+}
+
+.t-de {
+	text-decoration: underline;
+}
+
+/*********
+TOP DIV
+*********/
+.border.top {
+	margin-bottom: 2vh;
+	margin-top: 1vh;
+}
+
+.border.top .top1 {
+	padding: 10px;
+	justify-content: space-between;
+}
+
+.logo {
+	width: 25%;
+	align-self: center;
+}
+
+.logo img {
+	background: red;
+	width: auto;
+	height: 120px;
+}
+
+.top .text-info {
+	width: 65%;
+	align-self: center;
+}
+
+.top .text-info h4,
+.top .text-info p {
+	margin-bottom: 2px;
+}
+
+.top .text-info h4 {
+	font-size: 20px;
+}
+
+.top .text-info p {
+	font-weight: 700;
+	font-size: 12px;
+}
+
+.border.top .top2 {
+}
+
+.border.top .top2>div {
+	width: 33.33%;
+	padding: 5px 10px;
+}
+
+.border.top .top2 .top-info h4 {
+	text-align: left;
+	font-size: 12px;
+	font-weight: 900;
+	margin: 4px 0 3px;
+}
+
+.border.top .top2 .top-info p {
+	text-align: left;
+	font-size: 12px;
+}
+
+.border.top .top2 .bottom-info {
+	margin-top: 10px;
+}
+
+.border.top .top2 .bottom-info table {
+}
+
+.border.top .top2 .bottom-info table tr td {
+	line-height: 14px;
+}
+
+.border.top .top2 .bottom-info table tr td:first-child {
+	font-weight: 900;
+	font-size: 12px;
+	text-align: left;
+}
+
+.border.top .top2 .bottom-info table tr td:last-child {
+	text-align: left;
+}
+
+.border.top .top2 .bottom-info table tr td:last-child span {
+	margin-left: 10px;
+	font-size: 12px;
+}
+
+.border.top .third-div {
+	text-align: left;
+	font-size: 12px;
+	padding: 0 !important;
+}
+
+.border.top .third-div>div {
+}
+
+.border.top .third-div>div:nth-child(1) {
+	height: 30%;
+}
+
+.border.top .third-div>div:nth-child(2) {
+	height: 40%;
+}
+
+.border.top .third-div>div:nth-child(3) {
+	height: 30%;
+}
+
+.border.top .third-div>div>div {
+	padding: 5px;
+	width: 50%;
+}
+
+.border.top .third-div h4 {
+	margin-bottom: 3px;
+	font-size: 10px;
+	font-weight: 900;
+}
+
+.border.top .third-div p {
+	font-size: 10px;
+	font-weight: 500;
+}
+
+.border.top .third-div
+.border.top .third-div {
+}
+
+/*.border.top*/
+
+/*********
+BOTTOM DIV
+*********/
+.border.bottom {
+
+	/*height: 80vh;*/
+}
+
+.border.bottom .top-table {
+}
+
+.border.bottom .top-table table {
+	width: calc(100% + 1px);
+}
+
+.border.bottom .top-table table,
+.border.bottom .top-table tr,
+.border.bottom .top-table th,
+.border.bottom .top-table td {
+	border: 1px solid #111;
+	border-collapse: collapse;
+}
+
+.border.bottom .top-table th {
+	font-size: 12px;
+	border-top-color: #fff;
+}
+
+.border.bottom .top-table tr th:first-child {
+	border-left-color: #fff;
+}
+
+.border.bottom .top-table tr th:last-child {
+	border-right-color: #fff;
+}
+
+.border.bottom .top-table th:nth-child(1) {
+	width: 7%;
+}
+
+.border.bottom .top-table th:nth-child(2) {
+	width: 25%;
+}
+
+.border.bottom .top-table th:nth-child(3) {
+	width: 10%;
+}
+
+.border.bottom .top-table th:nth-child(4) {
+	width: 6%;
+}
+
+.border.bottom .top-table th:nth-child(5) {
+	width: 6%;
+}
+
+.border.bottom .top-table th:nth-child(6) {
+	width: 10%;
+}
+
+.border.bottom .top-table th:nth-child(7) {
+	width: 10%;
+}
+
+.border.bottom .top-table th:nth-child(8) {
+	width: 11%;
+}
+
+.border.bottom .top-table th:nth-child(9) {
+	width: 15%;
+}
+
+.border.bottom .top-table th>div {
+}
+
+.border.bottom .top-table th .top1 {
+	padding: 3px 0;
+}
+
+.border.bottom .top-table .btm1 {
+	justify-content: space-between;
+	padding: 2px 7px;
+}
+
+.border.bottom .top-table td {
+	height: 20px;
+	font-size: 12px;
+	padding: 3px 0;
+}
+
+.border.bottom .top-table tr td:first-child {
+	border-left-color: #fff;
+}
+
+.border.bottom .top-table tr td:last-child {
+	border-right-color: #fff;
+}
+
+.border.bottom .top-table td:nth-child(8) {
+}
+
+.border.bottom .top-table td >div {
+	display: inline-block;
+	width: 45%;
+}
+
+.border.bottom .top-table .table-footer td {
+	font-weight: 700;
+}
+
+.border.bottom .charge-amt {
+	display: flex;
+}
+
+.border.bottom .charge-amt>div {
+	padding: 10px 10px;
+}
+
+.border.bottom .charge-amt .div1 {
+	width: 48.8%;
+	text-align: left;
+}
+
+.border.bottom .charge-amt .div1 h4 {
+	font-weight: 900;
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+
+.border.bottom .charge-amt .div1 p {
+	font-weight: 500;
+	font-size: 14px;
+}
+
+.border.bottom .charge-amt .div2 {
+	width: 37%;
+	text-align: right;
+}
+
+.border.bottom .charge-amt .div2 p {
+}
+
+.border.bottom .charge-amt .div2 b {
+}
+
+.border.bottom .charge-amt .div3 {
+	width: 15%;
+}
+
+.border.bottom .charge-amt .div2 p,
+.border.bottom .charge-amt .div3 p {
+	font-size: 12px;
+	line-height: 20px;
+}
+
+.border.bottom .charge-amt .div2 b,
+.border.bottom .charge-amt .div3 b {
+}
+
+.border.bottom .bank-detail {
+	text-align: left;
+}
+
+.border.bottom .bank-detail h4 {
+	padding: 10px 10px 5px;
+}
+
+.border.bottom .bank-detail table {
+	width: 100%;
+}
+
+.border.bottom .bank-detail th {
+}
+
+.border.bottom .bank-detail th:nth-child(1) {
+	width: 15%;
+}
+
+.border.bottom .bank-detail th:nth-child(2) {
+	width: 35%;
+}
+
+.border.bottom .bank-detail th:nth-child(3) {
+	width: 16%;
+}
+
+.border.bottom .bank-detail th:nth-child(4) {
+	width: 35%;
+}
+
+.border.bottom .bank-detail td {
+	padding: 5px 10px;
+	font-weight: 700;
+	font-size: 12px;
+}
+
+.declare {
+	padding: 10px 10px 3px;
+}
+
+.declare h4 {
+	text-align: left;
+	margin-bottom: 4px;
+}
+
+.declare p {
+	font-size: 12px;
+	text-align: left;
+	font-weight: 700;
+}
+
+.declare b {
+	text-align: right;
+	display: block;
+	font-size: 12px;
+	margin: 10px 0 30px;
+}
+
+.declare >div {
+	display: flex;
+	justify-content: space-between;
+}
+
+
+.declare div h5 {
+}
+
+footer {
+	margin-top: 5px;
+}
+
+footer p {
+	font-size: 12px;
+	font-weight: 700;
+}
+
+@media only screen and (max-width:768px) {
+}
+
+@media only screen and (max-width:500px) {
+}
+
+@media only screen and (max-width:380px) {
+}
+
+@media only screen and (max-width:330px) {
+}

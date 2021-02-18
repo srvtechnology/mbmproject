@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+<style>
+.dash-panel .top-panel .card {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 10px 15px;
+	position: relative;
+	margin-bottom: 10px;
+}
+
+.dash-panel .top-panel .card .my-dash-icon {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	align-items: center;
+	text-align: center;
+	align-self: center;
+	display: flex;
+	justify-content: center;
+}
+
+.dash-panel .top-panel:nth-child(1) .card .my-dash-icon {
+	background: #f1a0ff;
+}
+
+.dash-panel .top-panel:nth-child(1) .card .my-dash-icon svg {
+	color: #7b0d8e;
+}
+
+.dash-panel .top-panel:nth-child(2) .card .my-dash-icon {
+	background: #fdcdbe;
+}
+
+.dash-panel .top-panel:nth-child(2) .card .my-dash-icon svg {
+	color: #b53810;
+}
+
+.dash-panel .top-panel:nth-child(3) .card .my-dash-icon {
+	background: #acfdb0;
+}
+
+.dash-panel .top-panel:nth-child(3) .card .my-dash-icon svg {
+	color: #126515;
+}
+
+.dash-panel .top-panel:nth-child(4) .card .my-dash-icon {
+	background: #c2ccff;
+}
+
+.dash-panel .top-panel:nth-child(4) .card .my-dash-icon svg {
+	color: #0f1f7b;
+}
+
+.dash-panel .top-panel .card .h4 {
+	font-weight: 700;
+	font-size: 22px;
+	margin: 0;
+}
+
+.dash-panel .top-panel .card span {
+	font-weight: 600;
+	font-size: 12px;
+	color: #555;
+}
+
+.dash-panel .top-panel .card .option1 {
+
+	/*display: none;*/
+	position: absolute;
+	top: 0px;
+	left: auto;
+	right: 10px;
+	color: #444;
+	font-size: 13px;
+}
+
+.dash-panel .top-panel .card:hover .option1 {
+	display: block;
+}
+
+.dash-panel .top-panel .text-div {
+	padding-right: 10px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+	<div id="content" class="p-4 p-md-5 pt-5">
+		<% switch (userType) {
+
+			case 'A' : %>
+			<div class="container-fluid dash-panel p-3">
+		<div class="row">
+
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% torder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Total Order</span>
+					<% }); %>
+				</div>
+				<a href="/orders" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% porder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Pending Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/P" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% aorder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Approved Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/A" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% iorder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>In-Progress Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/I" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+
+		</div>
+
+		<div class="row">
+
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% sorder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Shipped Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/S" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% dorder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Delivered Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/D" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-users"></i>
+				</div>
+				<div class="text-div">
+					<% seuser.forEach(function(user){ %>
+					<p class="h6">Count:<%= user.USERCOUNT %></p>
+					<span>Sales Executive</span>
+					<% }); %>
+				</div>
+				<a href="/users_se" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-users"></i>
+				</div>
+				<div class="text-div">
+					<% dtuser.forEach(function(user){ %>
+					<p class="h6">Count:<%= user.USERCOUNT %></p>
+					<span>Distributor</span>
+					<% }); %>
+				</div>
+				<a href="/users_dt" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+
+		</div>
+
+		<div class="row">
+
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-users"></i>
+				</div>
+				<div class="text-div">
+					<% dluser.forEach(function(user){ %>
+					<p class="h6">Count:<%= user.USERCOUNT %></p>
+					<span>Dealer</span>
+					<% }); %>
+				</div>
+				<a href="/users_dl" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fab fa-product-hunt"></i>
+				</div>
+				<div class="text-div">
+					<% product.forEach(function(prd){ %>
+					<p class="h6">Count:<%= prd.PRODUCTCOUNT %></p>
+					<span>Product</span>
+					<% }); %>
+				</div>
+				<a href="/products" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-layer-group"></i>
+				</div>
+				<div class="text-div">
+					<% category.forEach(function(cat){ %>
+					<p class="h6">Count:<%= cat.CATEGORYCOUNT %></p>
+					<span>Category</span>
+					<% }); %>
+				</div>
+				<a href="/categories" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% torder.forEach(function(order){ %>
+						<p class="h6">Invoice Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Total Order Invoice Generated</span>
+					<% }); %>
+				</div>
+				<a href="/orders" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		
+
+		</div>
+	</div>
+	<% break;
+
+		case 'HOD' : %>
+		<div class="container-fluid dash-panel p-3">
+	<div class="row">
+
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% torder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Total Order</span>
+				<% }); %>
+			</div>
+			<a href="/orders" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% porder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Pending Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/P" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% aorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Approved Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/A" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% iorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>In-Progress Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/I" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+
+	</div>
+
+	<div class="row">
+
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% sorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Shipped Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/S" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% dorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Delivered Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/D" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-users"></i>
+			</div>
+			<div class="text-div">
+				<% seuser.forEach(function(user){ %>
+				<p class="h6">Count:<%= user.USERCOUNT %></p>
+				<span>Sales Executive</span>
+				<% }); %>
+			</div>
+			<a href="/users_se" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-users"></i>
+			</div>
+			<div class="text-div">
+				<% dtuser.forEach(function(user){ %>
+				<p class="h6">Count:<%= user.USERCOUNT %></p>
+				<span>Distributor</span>
+				<% }); %>
+			</div>
+			<a href="/users_dt" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+
+	</div>
+
+	<div class="row">
+
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-users"></i>
+			</div>
+			<div class="text-div">
+				<% dluser.forEach(function(user){ %>
+				<p class="h6">Count:<%= user.USERCOUNT %></p>
+				<span>Dealer</span>
+				<% }); %>
+			</div>
+			<a href="/users_dl" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fab fa-product-hunt"></i>
+			</div>
+			<div class="text-div">
+				<% product.forEach(function(prd){ %>
+				<p class="h6">Count:<%= prd.PRODUCTCOUNT %></p>
+				<span>Product</span>
+				<% }); %>
+			</div>
+			<a href="/products" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-layer-group"></i>
+			</div>
+			<div class="text-div">
+				<% category.forEach(function(cat){ %>
+				<p class="h6">Count:<%= cat.CATEGORYCOUNT %></p>
+				<span>Category</span>
+				<% }); %>
+			</div>
+			<a href="/categories" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% torder.forEach(function(order){ %>
+					<p class="h6">Invoice Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Total Order Invoice Generated</span>
+				<% }); %>
+			</div>
+			<a href="/orders" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+
+	</div>
+</div>
+	<% break;
+
+	case 'SE' : %>
+	<div class="container-fluid dash-panel p-3">
+		<div class="row">
+
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% torder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Total Order</span>
+					<% }); %>
+				</div>
+				<a href="/orders" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% porder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Pending Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/P" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% aorder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Approved Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/A" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% iorder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>In-Progress Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/I" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+
+		</div>
+
+		<div class="row">
+
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% sorder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Shipped Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/S" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% dorder.forEach(function(order){ %>
+						<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Delivered Order</span>
+					<% }); %>
+				</div>
+				<a href="/ordersByStatus/D" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% torder.forEach(function(order){ %>
+						<p class="h6">Invoice Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Total Order Invoice Generated</span>
+					<% }); %>
+				</div>
+				<a href="/orders" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		</div>
+		
+		
+
+	</div>
+<% break;
+
+case 'DL' : %>
+<div class="container-fluid dash-panel p-3">
+	<div class="row">
+
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% torder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Total Order</span>
+				<% }); %>
+			</div>
+			<a href="/orders" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% porder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Pending Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/P" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% aorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Approved Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/A" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% iorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>In-Progress Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/I" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+
+	</div>
+
+	<div class="row">
+
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% sorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Shipped Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/S" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% dorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Delivered Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/D" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+			<div class="card">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<% torder.forEach(function(order){ %>
+						<p class="h6">Invoice Count:<%= order.ORDERCOUNT %></p>
+					<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+					<span>Total Order Invoice Generated</span>
+					<% }); %>
+				</div>
+				<a href="/orders" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+	</div>
+
+</div>
+<% break;
+
+case 'DT' : %>
+<div class="container-fluid dash-panel p-3">
+	<div class="row">
+
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% torder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Total Order</span>
+				<% }); %>
+			</div>
+			<a href="/orders" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% porder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Pending Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/P" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% aorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Approved Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/A" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% iorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>In-Progress Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/I" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+
+	</div>
+
+	<div class="row">
+
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% sorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Shipped Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/S" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% dorder.forEach(function(order){ %>
+					<p class="h6">Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Delivered Order</span>
+				<% }); %>
+			</div>
+			<a href="/ordersByStatus/D" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+		<div class="card">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<% torder.forEach(function(order){ %>
+					<p class="h6">Invoice Count:<%= order.ORDERCOUNT %></p>
+				<p class="h6">₹ &nbsp;<%= (order.ORDERTOTAL).toFixed(2) %></p>
+				<span>Total Order Invoice Generated</span>
+				<% }); %>
+			</div>
+			<a href="/orders" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+	</div>
+
+</div>
+<% break;
+
+	 } %>
+
+
+	</div>
+</div>
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+
+</script>
+</body>
+</html>

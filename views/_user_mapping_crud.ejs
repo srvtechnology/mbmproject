@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Mapping</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="add-update section">
+	<div class="container-fluid">
+		<div class="add-update-div section-div">
+			<h4 class="h4">ADD <span>USER MAPPING</span></h4>
+			<form id="mapping_form" action="/mapping_cr_post" method="post">
+				<input type="hidden" name="_csrf-backend" value="lMFvBr9BvDuVt3KbMU7QH2032ayJFXWy0fy-7ugetLfu8yo23jL0X9qEIMt2F7ROWlao2sVhR_O3le6MolPu8Q==">
+					<div class="col-6">
+						<div class="form-group">
+							<label for="edit-dltId">Dealer/Distributor</label>
+							<select class="form-control" id="edit-dltId" name="dltId" placeholder="Dealer/Distributor" required>
+								<% dltList.forEach(function(dlt){ %>
+									<option value="<%= dlt.USER_ID %>"><%= dlt.FIRSTNAME %> <%= dlt.LASTNAME %></option>
+									<% }); %>
+							</select>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="edit-seId">Sales Executive</label>
+							<select class="form-control" id="edit-seId" name="seId" placeholder="Sales Executive" required>
+								<% seList.forEach(function(se){ %>
+									<option value="<%= se.USER_ID %>"><%= se.FIRSTNAME %> <%= se.LASTNAME %></option>
+									<% }); %>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<button type="submit" class="btn btn-success w-25">SAVE</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+</body>
+</html>

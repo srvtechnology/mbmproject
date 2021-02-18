@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Products</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="add-update section">
+	<div class="container-fluid">
+		<div class="add-update-div section-div">
+			<h4 class="h4">ADD<span>PRODUCT</span></h4>
+			<form id="product_form" action="/product_cr_post" method="post" enctype="multipart/form-data">
+				<meta name="csrf-token" content="edYB2sOwAJ5i_UOiIx3OzxNi4XSJpWmudX7zcTSaO0ED5ETqosNI-i3OEfJkRKqeJAOQAsXRW-8TF6MTftdhBw==">
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label for="name">Name</label>
+							<input type="text" class="form-control" name="pname" id="name" placeholder="Name">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="desc">Description</label>
+							<textarea id="edit-desc" class="form-control" name="pdesc" rows="4" cols="50">
+							</textarea>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="catId">Category</label>
+							<select class="form-control" name="pcatId" id="catId" required>
+								<% subCatList.forEach(function(scat){ %>
+									<option value="<%= scat.LeafCategoryId %>"><%= scat.Name %></option>
+									<% }); %>
+							</select>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="list_price">List Price</label>
+							<input type="number" class="form-control" id="list_price" min="0" name="lprice" placeholder="List Price" required>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="oprice">Offer Price</label>
+							<input type="number" class="form-control" id="oprice" min="0" name="oprice" placeholder="Offer Price" value="" required>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="edit-inventory">Inventory</label>
+							<input type="number" class="form-control" id="edit-inventory" min="0" name="inventory" placeholder="Inventory" value="" required>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label for="edit-image">Image</label>
+							<input type="file" class="form-control" id="edit-image" name="image" placeholder="Image" value="">
+						</div>
+					</div>
+					<div class="col-12">
+						<button type="submit" class="btn btn-success w-25">SAVE</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+</body>
+</html>

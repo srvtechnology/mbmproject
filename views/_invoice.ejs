@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Invoice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
+
+<link rel="stylesheet" href="/stylesheets/style.css">
+
+</head>
+<body>
+
+<div class="container">
+	<div class="header">
+    <% invoice.forEach(function(inv){ %>
+		<h4><%= inv.NAME %></h4>
+    <% }); %>
+	</div>
+	<div class="border top">
+		<div class="d-flex b-b top1">
+			<div class="logo">
+				<img src="/images/mbm.jpg" alt="">
+			</div>
+			<div class="text-info">
+				<h4>MBM (INDIA) PRIVATE LIMITED </h4>
+				<p> KHASRA NO:51/6, VILLAGE ALIPUR LANDMARK, SPLASH WATER PARK , DELHI - 110036, DL, India.</p>
+				<p>GSTIN: 07AAECM3173F1ZM</p>
+				<p>Website: www.mbmindia.co.in</p>
+			</div>
+		</div>
+    <% address.forEach(function(add){ %>
+    <div class="d-flex top2">
+      <div class="b-r">
+        <div class="top-info">
+          <h4 class="t-de">Buyer (Billing Address) :</h4>
+          <h4><%= add.company %></h4>
+          <p>
+            <%= add.ADDRESSLINE1 %>
+            <br>
+     <%= add.CITY %> - <%= add.ZIPCODE %>
+            <br>
+            <%= add.STATE %>, <%= add.COUNTRY %>
+          </p>
+        </div>
+        <div class="bottom-info">
+          <table>
+            <tbody>
+              <tr>
+                <td>GSTIN/UIN</td>
+                <td>: <span><%= add.gstin %></span></td>
+              </tr>
+              <tr>
+                <td>State Name</td>
+                <td>: <span> <%= add.STATE %></span></td>
+              </tr>
+              <tr>
+                <td>State Code</td>
+                <td>: <span></span></td>
+              </tr>
+              <tr>
+                <td>Place of Supply</td>
+                <td>: <span><%= add.STATE %></span></td>
+              </tr>
+              <tr>
+                <td>Mobile No</td>
+                <td>: <span><%= add.MOBILE1 %></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="b-r">
+        <div class="top-info">
+          <h4 class="t-de">Consignee (Shipping Address) :</h4>
+          <h4><%= add.company %></h4>
+          <p>
+            <%= add.ADDRESSLINE1 %>
+            <br>
+     <%= add.CITY %> - <%= add.ZIPCODE %>
+            <br>
+            <%= add.STATE %>, <%= add.COUNTRY %>
+          </p>
+        </div>
+        <div class="bottom-info">
+          <table>
+            <tbody>
+              <tr>
+                <td>GSTIN/UIN</td>
+                <td>: <span><%= add.gstin %></span></td>
+              </tr>
+              <tr>
+                <td>State Name</td>
+                <td>: <span> <%= add.STATE %></span></td>
+              </tr>
+              <tr>
+                <td>State Code</td>
+                <td>: <span></span></td>
+              </tr>
+              <tr>
+                <td>Place of Supply</td>
+                <td>: <span><%= add.STATE %></span></td>
+              </tr>
+              <tr>
+                <td>Mobile No</td>
+                <td>: <span><%= add.MOBILE1 %></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="third-div">
+        <div class="d-flex b-b">
+          <div class="b-r">
+            <h4>Invoice No :</h4>
+            <% invoice.forEach(function(inv){ %>
+            <p>MBM<%= inv.INVOICE_ID %> - <%= moment(inv.GENERATEDATE).format( 'DDMMYYYY') %></p>
+            <% }); %>
+          </div>
+          <div>
+            <h4>Invoice No :</h4>
+            <% invoice.forEach(function(inv){ %>
+            <p>MBM<%= inv.INVOICE_ID %> - <%= moment(inv.GENERATEDATE).format( 'DDMMYYYY') %></p>
+            <% }); %>
+          </div>
+        </div>
+        <div class="d-flex b-b">
+          <div class="b-r">
+            <h4>Invoice No :</h4>
+            <% invoice.forEach(function(inv){ %>
+            <p>MBM<%= inv.INVOICE_ID %> - <%= moment(inv.GENERATEDATE).format( 'DDMMYYYY') %></p>
+            <% }); %>
+            <h4>Invoice No :</h4>
+            <% invoice.forEach(function(inv){ %>
+            <p>MBM<%= inv.INVOICE_ID %> - <%= moment(inv.GENERATEDATE).format( 'DDMMYYYY') %></p>
+            <% }); %>
+          </div>
+          <div>
+            <h4>Invoice No :</h4>
+            <% invoice.forEach(function(inv){ %>
+            <p>MBM<%= inv.INVOICE_ID %> - <%= moment(inv.GENERATEDATE).format( 'DDMMYYYY') %></p>
+            <% }); %>
+            <h4>Invoice No :</h4>
+            <% invoice.forEach(function(inv){ %>
+            <p>MBM<%= inv.INVOICE_ID %> - <%= moment(inv.GENERATEDATE).format( 'DDMMYYYY') %></p>
+            <% }); %>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="b-r">
+            <h4>Invoice No :</h4>
+            <% invoice.forEach(function(inv){ %>
+            <p>MBM<%= inv.INVOICE_ID %> - <%= moment(inv.GENERATEDATE).format( 'DDMMYYYY') %></p>
+            <% }); %>
+          </div>
+          <div>
+            <h4>Invoice No :</h4>
+            <% invoice.forEach(function(inv){ %>
+            <p>MBM<%= inv.INVOICE_ID %> - <%= moment(inv.GENERATEDATE).format( 'DDMMYYYY') %></p>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% }); %>
+
+	</div>
+	<div class="border bottom">
+		<div class="top-table">
+			<table>
+				<thead>
+					<tr>
+						<th>Sl. No</th>
+						<th>Description of Goods</th>
+						<th>
+							HSN Code/
+							<br>
+							TariffHead
+						</th>
+						<th>Units</th>
+						<th>
+							No. of
+							<br>
+							Package
+						</th>
+						<th>Rate</th>
+						<th>
+							<div class="b-b top1">
+								Discount
+							</div>
+							<div class="d-flex btm1">
+								<div>%</div>
+								<div>Amt</div>
+							</div>
+						</th>
+						<th>Amount</th>
+					</tr>
+				</thead>
+				<tbody>
+          <% products.forEach(function(prd){ %>
+          <tr>
+						<td>01</td>
+						<td><%= prd.NAME %></td>
+						<td></td>
+						<td><%= prd.QUANTITY %></td>
+						<td></td>
+						<td><%= prd.PRICE %></td>
+						<td>
+							<div>
+								0.00
+							</div>
+							<div>
+								0.00
+							</div>
+						</td>
+						<td><%= prd.TOTAL %></td>
+					</tr>
+          <% }); %>
+					<!----------
+					 table footer
+					------------>
+          <% ordersdtl.forEach(function(ord){ %>
+					<tr class="text-center table-footer">
+						<td></td>
+						<td>TOTAL</td>
+						<td></td>
+						<td><%= ord.TQTY %></td>
+						<td></td>
+						<td></td>
+						<td></td>
+
+						<td><%= ord.FIELD1 %></td>
+					</tr>
+					<!----------
+					 table footer
+					------------>
+				</tbody>
+			</table>
+		</div>
+		<div class="charge-amt b-b">
+			<div class="div1 b-r">
+				<h4 class="t-de">Amount Chargeable (in Words) :</h4>
+				<p> Twenty-Six Thousand Six Hundred Sixty-Eight only</p>
+			</div>
+			<div class="div2 b-r">
+				<p><b>Freight</b></p>
+				<p><b>CGST</b> @0.00</p>
+				<p><b>SGST</b> @0.00</p>
+				<p><b>IGST</b> @17.5%</p>
+				<p><b>Total Tax</b></p>
+				<p><b>Round off</b></p>
+				<p><b>Grand Total</b></p>
+			</div>
+			<div class="div3">
+				<p><b>0.00</b></p>
+				<p>0.00</p>
+				<p>0.00</p>
+				<p><%= ord.TAX %></p>
+				<p><b><%= ord.TAX %></b></p>
+				<p><b>0.00</b></p>
+				<p><b><%= ord.TOTAL %></b></p>
+			</div>
+		</div>
+    <% }); %>
+		<div class="bank-detail b-b">
+			<h4>Bank Details :</h4>
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Bank Name</td>
+						<td>: <span>State Bank Of India</span></td>
+						<td>A/C No</td>
+						<td>: <span>31132451668</span></td>
+					</tr>
+					<tr>
+						<td>Branch</td>
+						<td>: <span>Noida</span></td>
+						<td>IFSC Code</td>
+						<td>: <span>SBIN0001320</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="declare">
+			<h4>Declaraton :</h4>
+			<p>We declared that this invoice shows the actual price of the goods described and that all partculars are true and correct.</p>
+			<b>for MBM (INDIA) PVT LTD</b>
+			<div>
+				<h5>Prepared By</h5>
+				<h5>Checked By</h5>
+				<h5>Authorised Signatory</h5>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<p>This is a Computer Generated Invoice</p>
+	</footer>
+</div>
+<a class="btn btn-warning rounded-0" onclick="printPage()" >Download</a>
+</body>
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script type="text/javascript">
+  function printPage(){
+        window.print();
+          return false;
+  };
+</script>
+</html>

@@ -1,0 +1,267 @@
+<nav id="sidebar" class="active">
+  <div class="custom-menu">
+    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+    <i class="fa fa-bars"></i>
+    <span class="sr-only">Toggle Menu</span>
+    </button>
+  </div>
+  <div class="p-4 pt-5">
+    <h1><a href="/" class="logo">MBM Chairs</a></h1>
+    <ul class="list-unstyled components mb-5">
+      <% switch (userType) {
+
+        case 'A' : %>
+        <h1><a href="/" class="logo">Admin Panel</a></h1>
+      <li class="active"><a href="/"><i class="fa fa-home"></i> &nbsp;<span>Dashboard</span></a></li>
+      <li>
+        <div class="accordion" id="userSetting">
+          <div class="">
+            
+            <div class="" id="headingOne">
+              <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="drop-a collapsed">
+                <i class="fa fa-address-card"></i> &nbsp;
+                <span>User Setting</span> &nbsp;
+                <i class="fa fa-chevron-up"></i>
+              </a>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#userSetting">
+              <a href="/users_se"><i class="fa fa-angle-double-right"></i> Sales Executives</a>
+              <a href="/users_dl"><i class="fa fa-angle-double-right"></i> Dealer</a>
+              <a href="/users_dt"><i class="fa fa-angle-double-right"></i> Distributor</a>
+              <a href="/users_ld"><i class="fa fa-angle-double-right"></i> Leads</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li><a href="/mapping"><i class="fa fa-user-plus"></i> &nbsp;<span>User Mapping</span></a></li>
+      <li>
+        <div class="accordion" id="productSetting">
+          <div class="">
+            <div class="" id="headingTwo">
+              <a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" class="drop-a collapsed">
+                <i class="fas fa-cog"></i> &nbsp;
+                <span>Product Setting</span> &nbsp;
+                <i class="fa fa-chevron-up"></i>
+              </a>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#productSetting">
+              <a href="/categories"><i class="fa fa-angle-double-right"></i> Category</a>
+              <a href="/product_cr"><i class="fa fa-angle-double-right"></i> Add Products</a>
+              <a href="/products"><i class="fa fa-angle-double-right"></i> Products</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li><a href="/sparepart"><i class="fa fa-user-plus"></i> &nbsp;<span>Spare Parts</span></a></li>
+      <li><a href="/enquiry_lt"><i class="fa fa-question-circle"></i></i> &nbsp;<span>Enquiry</span></a></li>
+      <li><a href="/prices"><i class="fas fa-tags"></i>&nbsp;<span>Price Management</span></a></li>
+      <li><a href="/inventory"><i class="fas fa-dolly-flatbed"></i> &nbsp;<span>Inventory Management</span></a></li>
+      <li><a href="/orders"><i class="fa fa-bars"></i> &nbsp;<span>Order Details</span></a></li>
+      <li><a href="/complaints"><i class="fa fa-bars"></i> &nbsp;<span>Complaints</span></a></li>
+      <li><a href="/logout" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-unlock"></i> &nbsp;<span>Logout</span></a></li>
+      <% break;
+
+      case 'HOD' : %>
+    <li class="active"><a href="/"><i class="fa fa-home"></i> &nbsp;<span>Dashboard</span></a></li>
+    <li>
+      <div class="accordion" id="userSetting">
+        <div class="">
+          <div class="" id="headingOne">
+            <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="drop-a collapsed">
+              <i class="fa fa-address-card"></i> &nbsp;
+              <span>User Setting</span> &nbsp;
+              <i class="fa fa-chevron-up"></i>
+            </a>
+          </div>
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#userSetting">
+            <a href="/users_se"><i class="fa fa-angle-double-right"></i> Sales Executives</a>
+            <a href="/users_dl"><i class="fa fa-angle-double-right"></i> Dealer</a>
+            <a href="/users_dt"><i class="fa fa-angle-double-right"></i> Distributor</a>
+            <a href="/users_ld"><i class="fa fa-angle-double-right"></i> Leads</a>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li><a href="/mapping"><i class="fa fa-user-plus"></i> &nbsp;<span>User Mapping</span></a></li>
+    <li>
+      <div class="accordion" id="productSetting">
+        <div class="">
+          <div class="" id="headingTwo">
+            <a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" class="drop-a collapsed">
+              <i class="fas fa-cog"></i> &nbsp;
+              <span>Product Setting</span> &nbsp;
+              <i class="fa fa-chevron-up"></i>
+            </a>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#productSetting">
+            <a href="/categories"><i class="fa fa-angle-double-right"></i> Category</a>
+            <a href="/product_cr"><i class="fa fa-angle-double-right"></i> Add Products</a>
+            <a href="/products"><i class="fa fa-angle-double-right"></i> Products</a>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li><a href="/sparepart"><i class="fa fa-user-plus"></i> &nbsp;<span>Spare Parts</span></a></li>
+    <li><a href="/enquiry_lt"><i class="fa fa-question-circle"></i></i> &nbsp;<span>Enquiry</span></a></li>
+    <li><a href="/prices"><i class="fas fa-tags"></i>&nbsp;<span>Price Management</span></a></li>
+    <li><a href="/inventory"><i class="fas fa-dolly-flatbed"></i> &nbsp;<span>Inventory Management</span></a></li>
+    <li><a href="/orders"><i class="fa fa-bars"></i> &nbsp;<span>Order Details</span></a></li>
+    <li><a href="/logout" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-unlock"></i> &nbsp;<span>Logout</span></a></li>
+    <% break;
+
+    case 'SE' : %>
+  <li class="active"><a href="/"><i class="fa fa-home"></i> &nbsp;<span>Dashboard</span></a></li>
+  <li>
+    <li><a href="/create_se_user"><i class="fa fa-handshake"></i> &nbsp;<span>Add Lead</span></a></li>
+  <li>
+    <div class="accordion" id="userSetting">
+      <div class="">
+        <div class="" id="headingOne">
+          <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="drop-a collapsed">
+            <i class="fa fa-address-card"></i> &nbsp;
+            <span>User Setting</span> &nbsp;
+            <i class="fa fa-chevron-up"></i>
+          </a>
+        </div>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#userSetting">
+          <a href="/users_dl"><i class="fa fa-angle-double-right"></i> Dealer</a>
+          <a href="/users_dt"><i class="fa fa-angle-double-right"></i> Distributor</a>
+        </div>
+      </div>
+    </div>
+  </li>
+  <li><a href="/cart"><i class="fa fa-shopping-cart"></i> &nbsp;<span>Order View</span></a></li>
+  <li>
+    <div class="accordion" id="productSetting">
+      <div class="">
+        <div class="" id="headingTwo">
+          <a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" class="drop-a collapsed">
+            <i class="fas fa-cog"></i> &nbsp;
+            <span>Product Setting</span> &nbsp;
+            <i class="fa fa-chevron-up"></i>
+          </a>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#productSetting">
+          <a href="/products"><i class="fa fa-angle-double-right"></i> Products</a>
+        </div>
+      </div>
+    </div>
+  </li>
+  <li><a href="/enquiry_lt"><i class="fa fa-question-circle"></i></i> &nbsp;<span>Enquiry</span></a></li>
+  <li><a href="/followup_lt"><i class="fa fa-phone-square-alt"></i></i> &nbsp;<span>Follow Up</span></a></li>
+  <li><a href="/orders"><i class="fa fa-bars"></i> &nbsp;<span>Order Details</span></a></li>
+  <li><a href="/logout" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-unlock"></i> &nbsp;<span>Logout</span></a></li>
+  <% break;
+
+  case 'DL' : %>
+<li class="active"><a href="/"><i class="fa fa-home"></i> &nbsp;<span>Dashboard</span></a></li>
+<li>
+  <div class="accordion" id="userSetting">
+    <div class="">
+      <div class="" id="headingOne">
+        <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="drop-a collapsed">
+          <i class="fa fa-address-card"></i> &nbsp;
+          <span>User Setting</span> &nbsp;
+          <i class="fa fa-chevron-up"></i>
+        </a>
+      </div>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#userSetting">
+        <a href="/users_se"><i class="fa fa-angle-double-right"></i> Sales Executives</a>
+      </div>
+    </div>
+  </div>
+</li>
+<li><a href="/cart"><i class="fa fa-shopping-cart"></i> &nbsp;<span>Order View</span></a></li>
+<li>
+  <div class="accordion" id="productSetting">
+    <div class="">
+      <div class="" id="headingTwo">
+        <a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" class="drop-a collapsed">
+          <i class="fas fa-cog"></i> &nbsp;
+          <span>Product Setting</span> &nbsp;
+          <i class="fa fa-chevron-up"></i>
+        </a>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#productSetting">
+        <a href="/products"><i class="fa fa-angle-double-right"></i> Products</a>
+      </div>
+    </div>
+  </div>
+</li>
+<li><a href="/orders"><i class="fa fa-bars"></i> &nbsp;<span>Order Details</span></a></li>
+<li><a href="/complaints"><i class="fa fa-bars"></i> &nbsp;<span>Complaints</span></a></li>
+<li><a href="/logout" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-unlock"></i> &nbsp;<span>Logout</span></a></li>
+<% break;
+
+case 'DT' : %>
+<li class="active"><a href="/"><i class="fa fa-home"></i> &nbsp;<span>Dashboard</span></a></li>
+<li>
+<div class="accordion" id="userSetting">
+  <div class="">
+    <div class="" id="headingOne">
+      <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="drop-a collapsed">
+        <i class="fa fa-address-card"></i> &nbsp;
+        <span>User Setting</span> &nbsp;
+        <i class="fa fa-chevron-up"></i>
+      </a>
+    </div>
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#userSetting">
+      <a href="/users_se"><i class="fa fa-angle-double-right"></i> Sales Executives</a>
+    </div>
+  </div>
+</div>
+</li>
+<li><a href="/cart"><i class="fa fa-shopping-cart"></i> &nbsp;<span>Order View</span></a></li>
+<li>
+<div class="accordion" id="productSetting">
+  <div class="">
+    <div class="" id="headingTwo">
+      <a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" class="drop-a collapsed">
+        <i class="fas fa-cog"></i> &nbsp;
+        <span>Product Setting</span> &nbsp;
+        <i class="fa fa-chevron-up"></i>
+      </a>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#productSetting">
+      <a href="/products"><i class="fa fa-angle-double-right"></i> Products</a>
+    </div>
+  </div>
+</div>
+</li>
+<li><a href="/orders"><i class="fa fa-bars"></i> &nbsp;<span>Order Details</span></a></li>
+<li><a href="/complaints"><i class="fa fa-bars"></i> &nbsp;<span>Complaints</span></a></li>
+<li><a href="/logout" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-unlock"></i> &nbsp;<span>Logout</span></a></li>
+<% break;
+
+     } %>
+    </ul>
+    <div class="">
+      <p> Copyright © MBM Chairs 2020</p>
+    </div>
+  </div>
+  <a href="/profile" class="profile-div">
+    <div class="img-div">
+      <img src="/images/users/<%= userImg %>" alt="<%= username %>" class="img-fluid">
+    </div>
+    <span><%= username %></span>
+  </a>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="logoutModalLabel">Do you really want to <spaan class="text-danger">LOGOUT</spaan> ?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!-- <div class="modal-body">
+      ...
+    </div> -->
+    <div class="modal-footer d-flex justify-content-between">
+      <a href="/logout" class="btn btn-danger">LOGOUT</a>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+</nav>
