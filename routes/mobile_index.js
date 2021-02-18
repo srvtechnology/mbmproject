@@ -1691,7 +1691,7 @@ router.post('/consolelogin', function(req,res,next){
         //complaints api post
         router.post('/complaints', function(req, res, next) {
           var userId=req.body.userId;
-          var userType=req.body.userType;
+          //var userType=req.body.userType;
           var status='P';
           var order_qty_complain = req.body.order_qty_complain;
           var order_qa_complain = req.body.order_qa_complain;
@@ -1703,7 +1703,7 @@ router.post('/consolelogin', function(req,res,next){
           var sqlstmt = "INSERT INTO complaints (order_id,order_qty_complain,order_qa_complain, order_delivery_complain, CREATETIME, UPDATETIME, feedback, STATUS, user_id) VALUES?";
 
               var values = [
-                [order_id,order_qty_complain, order_qa_complain, order_delivery_complain, CREATEDATE, UPDATETIME, feedback, status, user_id]
+                [order_id,order_qty_complain, order_qa_complain, order_delivery_complain, CREATEDATE, UPDATETIME, feedback, status, userId]
               ]
               db.query(sqlstmt, [values], function(err,result) {
                 if (err) {
