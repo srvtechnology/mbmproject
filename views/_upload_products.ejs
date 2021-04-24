@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Upload Products</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
+<link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="order section">
+	<div class="container-fluid">
+		<div class="order-div section-div">
+			<h4 class="h4">Upload <span>Product</span></h4>
+			
+			<i class="dropdown-divider d-block"></i>
+			
+			<div class="col-md-12">
+		    <div class="card"></div>
+		      <div class="card-header">
+		        <h4 class="card-title">Upload Products from Excel</h4>
+		      </div>
+              
+		      <div class="card-body">
+                <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-danger rounded-0">Upload Products</button>
+		        <div class="table-responsive">
+		          <table id="basic-datatables" class="display table table-striped table-hover" >
+		            <thead>
+		              <tr>
+                        <th>Item No</th>
+						<th>Sub Group Level 1</th>
+						<th>Sub Group Level 2</th>
+		                <th>Description</th>
+		                <th>Stock</th>
+                        <th>Action</th>		
+		              </tr>
+		            </thead>
+		  <tbody>
+				
+				<% if (products) { %>
+					<% products.forEach(function(product){ %>
+				<tr>
+					<td scope="row">
+						<p><%= product.item_no %></p>
+					</td>
+					<td scope="row">
+						<p><%= product.sub_group_level_1 %></p>
+					</td>
+                    <td scope="row">
+						<p><%= product.sub_group_level_2 %></p>
+					</td>
+                    <td scope="row">
+                       <p><%= product.item_description %></p>
+					</td>
+                    <td scope="row">
+                        <p><%= product.in_stock %></p>
+					</td>
+
+					<td>                       
+                        <button type="submit" class="btn btn-info rounded-0">Edit</button>
+					</td>
+				</tr>
+				<% }); %>
+				<%} %>
+
+		</tbody>
+		</table>
+		</div>
+		</div>
+		
+		</div>
+		</div>
+	</div>
+</div>
+</div>
+
+
+
+<div id="myModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Submit Excel file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+			<form id="productuploadform" method="POST" action="/upload_product_file" enctype="multipart/form-data">
+				<div class="form-group">
+				  <label for="exampleFormControlFile1" >Upload File</label>
+				  <input type="file" name="productfile" class="form-control-file" accept=".xlsx" required>
+				</div>
+				<button class="btn btn-primary"  style="border-radius: .5rem;" type="submit">Submit</button>
+			  </form>
+        </div>
+        <div class="modal-footer">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+$(document).ready(function() {
+	var table = $('#basic-datatables').DataTable();
+	var order = table.order([0,'desc']).draw();
+});
+</script>
+</body>
+</html>

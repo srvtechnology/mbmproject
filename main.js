@@ -22,6 +22,7 @@ var registerRouter = require('./routes/register');
 var uploadRouter = require('./routes/upload_file');
 var actionRouter = require('./routes/action');
 var apiRouter=require('./routes/mobile_index');
+var cronJob = require('./cron_jobs/cron_job');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('ejs', require('ejs').renderFile);
@@ -41,6 +42,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static('public')); // <-- This right here
+
 //routers
 app.use('/', indexRouter);
 app.use('/logReq', loginRouter);
@@ -64,6 +67,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('_error',{error:'',userId:'',userType:'',username:'',userImg:''});
 });
-
+cronJob.updatePaymentDueDays();
 app.listen(8080);
 module.exports = app;

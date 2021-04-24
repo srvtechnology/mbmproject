@@ -7,8 +7,12 @@
 <!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
 
 
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
 <link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
 <!-- local style css -->
 <link rel="stylesheet" href="/stylesheets/navbar.css">
@@ -21,7 +25,7 @@
 <div class="dist-dealer-list section">
 	<div class="container-fluid">
 		<div class="dist-dealer-list-div section-div">
-			<form action="/users_dtByName" method="post">
+			<!-- <form action="/users_dtByName" method="post">
 				<div class="row">
 					<div class="col-6">
 						<div class="form-group">
@@ -34,29 +38,30 @@
 						</div>
 					</div>
 				</div>
-			</form>
+			</form> -->
 			<div class="d-flex justify-content-between mb-2">
 				<h4 class="h4">DISTRIBUTER <span>LIST</span></h4>
-				<a href="/create_dt" class="btn btn-danger btn-create btn-sm">+ Create Distributer</a>
+				<a href="/create_dt" class="btn btn-danger">+ Create Distributer</a>
 			</div>
-			<div class="table-div" id="horizontalScroll">
-				<table class="table table-striped">
-				<thead class="thead-light">
+			<!-- id="horizontalScroll" -->
+			<div class="table-div">
+				<table id="basic-datatables" class="display table table-striped table-hover">
+				<thead>
 					<tr>
-						<th scope="col">First Name</th>
-						<th scope="col">Last Name</th>
-						<th scope="col">Shop/Company Name</th>
-						<th scope="col">Login ID</th>
-						<th scope="col">Email ID</th>
-						<th scope="col">Address</th>
-						<th scope="col">Aadhar Number</th>
-						<th scope="col">PAN Card No.</th>
-						<th scope="col">GSTIN Number</th>
-						<th scope="col">Mobile Number</th>
-						<th scope="col">Phone Number</th>
-						<th scope="col">Zip Code</th>
-						<th scope="col" class="action">Status</th>
-						<th scope="col" class="action">Action</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Shop/Company Name</th>
+						<th>Login ID</th>
+						<th>Email ID</th>
+						<th>Address</th>
+						<th>Aadhar Number</th>
+						<th>PAN Card No.</th>
+						<th>GSTIN Number</th>
+						<th>Mobile Number</th>
+						<th>Phone Number</th>
+						<th>Zip Code</th>
+						<th class="action">Status</th>
+						<th class="action">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -92,7 +97,7 @@
 				</tbody>
 			</table>
 			</div>
-			<div class="pagination">
+			<!-- <div class="pagination">
   <a href="/users_dt/pageNo/1">&laquo;</a>
   <a href="/users_dt/pageNo/1" class="active">1</a>
   <a href="/users_dt/pageNo/2">2</a>
@@ -101,7 +106,7 @@
   <a href="/users_dt/pageNo/5">5</a>
   <a href="/users_dt/pageNo/6">6</a>
   <a href="/users_dt/pageNo/7">&raquo;</a>
-</div>
+</div> -->
 		</div>
 	</div>
 </div>
@@ -110,6 +115,10 @@
 <script src="/javascripts/fontawwesome.js"></script>
 <!-- jQuery -->
 <script src="/javascripts/jquery.min.js"></script>
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
 <!-- Popper.js -->
 <script src="/javascripts/popper.js"></script>
 <!-- Bootstrap JS -->
@@ -119,6 +128,10 @@
 <!-- app -->
 <script src="/javascripts/app.js"></script>
 <script>
+	$(document).ready(function() {
+	$('#basic-datatables').DataTable({
+	});
+});
 (function() {
     function scrollHorizontally(e) {
         e = window.event || e;

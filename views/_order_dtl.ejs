@@ -131,7 +131,7 @@
 	function memderIdDetail(){
 		console.log('in by');
 		$(document).ready(function(){
-	$.ajax({ url: "http://localhost:8080/regAct/getMemberDetails/memberid/"+data[0].MEMBER_ID,
+	$.ajax({ url: "/regAct/getMemberDetails/memberid/"+data[0].MEMBER_ID,
         context: document.body,
         success: function(result){
 			console.log(result.data);
@@ -145,7 +145,7 @@
 	function memderIdForDetail() {
 		console.log('in for');
 		$(document).ready(function(){
-	$.ajax({ url: "http://localhost:8080/regAct/getMemberDetails/memberid/"+data[0].MEMBER_ID_FOR,
+	$.ajax({ url: "/regAct/getMemberDetails/memberid/"+data[0].MEMBER_ID_FOR,
         context: document.body,
         success: function(result){
 			console.log(result.data);

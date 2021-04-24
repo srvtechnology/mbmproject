@@ -6,6 +6,9 @@ var router = express.Router();
 var db = require('../config/database');
 var emailer = require('../config/emailers');
 var const_data = require('../config/const');
+const { route } = require('./login');
+const session = require('express-session');
+const readXlsxFile = require("read-excel-file/node");
 //var { getAllActiveSessions } = require('../redis');
 var data;
 const format1 = "YYYY-MM-DD HH:mm:ss";
@@ -96,6 +99,7 @@ router.get('/', function(req, res, next) {
       " join role c on c.ROLE_ID=b.ROLE_ID WHERE c.IDENTIFIER='DL'";
       var PRDSQL="select COUNT(*) AS PRODUCTCOUNT from product";
       var CATSQL="select COUNT(*) AS CATEGORYCOUNT from leafcategory";
+      var GETPERFORMANCE = "select SALES_TARGET, SALES_ACHIEVED from sales_target where user_id="+sess.user_id+" AND SALES_TARGET_STATUS = 0";
       db.query(TotalOrderSQL, function(err,result1) {
           if (err) {
             throw err;
@@ -151,8 +155,14 @@ router.get('/', function(req, res, next) {
                                                     throw err;
                                                     return res.redirect('/login');
                                                   }
-                                  res.render('_dashboard',{username:sess.username,userId:sess.user_id,userType:sess.user_type,userImg:sess.user_img,
-                                  torder:result1,porder:result2,aorder:result3,iorder:result4,sorder:result5,dorder:result6,seuser:result7,dtuser:result8,dluser:result9,product:result10,category:result11});
+                                                    db.query(GETPERFORMANCE, function(err, result12) {
+                                                      if (err) {
+                                                        throw err;
+                                                        return res.redirect('/login');
+                                                      }
+                                                      res.render('_dashboard',{username:sess.username,userId:sess.user_id,userType:sess.user_type,userImg:sess.user_img,
+                                                        torder:result1,porder:result2,aorder:result3,iorder:result4,sorder:result5,dorder:result6,seuser:result7,dtuser:result8,dluser:result9,product:result10,category:result11,performance:result12});
+                                                    });
                                                   });
                                               });
                                           });
@@ -441,6 +451,213 @@ router.get('/cart', function(req, res, next) {
   }
 });
 
+
+/* perforamce */
+router.get('/sale_target', function(req, res, next) {
+  var sess=req.session;
+
+  var GETPERFORMANCE = "SELECT * FROM sales_target";
+  var dltSQL="select a.USER_ID,a.LOGON_ID1,d.FIRSTNAME,d.LASTNAME from user a join usrrole b on b.USER_ID=a.USER_ID"+
+         " join role c on c.ROLE_ID=b.ROLE_ID join address d on d.MEMBER_ID=a.USER_ID "+
+         " WHERE a.STATUS='1' and c.IDENTIFIER IN ('DT','DL')";
+  var seSQL="select a.USER_ID,a.LOGON_ID1,d.FIRSTNAME,d.LASTNAME from user a join usrrole b on b.USER_ID=a.USER_ID"+
+         " join role c on c.ROLE_ID=b.ROLE_ID join address d on d.MEMBER_ID=a.USER_ID "+
+         " WHERE a.STATUS='1' and c.IDENTIFIER IN ('SE')";
+  if(sess === undefined){
+    return res.redirect('/login');
+  }else{
+    if(sess.user_type === 'A'){
+      db.query(GETPERFORMANCE, function(err, result) {
+        if (err) {
+          throw err;
+          return res.redirect('/login');
+        }
+        db.query(dltSQL, function(err, result2) {
+          if (err) {
+            throw err;
+            return res.redirect('/login');
+          }
+          db.query(seSQL, function(err, result3) {
+            if (err) {
+              throw err;
+              return res.redirect('/login');
+            }
+            res.render('_sales_target',{ dldtList:result2,seList:result3,salestargets:result,userId:sess.user_id,userType:sess.user_type,username:sess.username,userImg:sess.user_img});
+          });
+        });
+      });
+    }else{
+      return res.redirect('/login');
+    } 
+  }
+});
+
+
+
+router.post('/get_sales_target', function(req, res, next) {
+  var sess=req.session;
+  var sales_month=req.body.sales_month;
+  var sales_year = req.body.sales_year;
+
+  if(sales_month != "00" && sales_year != "00"){
+    var GETPERFORMANCE = "SELECT * FROM sales_target WHERE MONTH(CREATETIME) ="+sales_month+" AND YEAR(CREATETIME)="+sales_year+"";
+    var dltSQL="select a.USER_ID,a.LOGON_ID1,d.FIRSTNAME,d.LASTNAME from user a join usrrole b on b.USER_ID=a.USER_ID"+
+          " join role c on c.ROLE_ID=b.ROLE_ID join address d on d.MEMBER_ID=a.USER_ID "+
+          " WHERE a.STATUS='1' and c.IDENTIFIER IN ('DT','DL')";
+    var seSQL="select a.USER_ID,a.LOGON_ID1,d.FIRSTNAME,d.LASTNAME from user a join usrrole b on b.USER_ID=a.USER_ID"+
+          " join role c on c.ROLE_ID=b.ROLE_ID join address d on d.MEMBER_ID=a.USER_ID "+
+          " WHERE a.STATUS='1' and c.IDENTIFIER IN ('SE')";
+    if(sess === undefined){
+      return res.redirect('/login');
+    }else{
+      if(sess.user_type === 'A'){
+        db.query(GETPERFORMANCE, function(err, result) {
+          if (err) {
+            throw err;
+            return res.redirect('/login');
+          }
+          db.query(dltSQL, function(err, result2) {
+            if (err) {
+              throw err;
+              return res.redirect('/login');
+            }
+            db.query(seSQL, function(err, result3) {
+              if (err) {
+                throw err;
+                return res.redirect('/login');
+              }
+              res.render('_sales_target',{ dldtList:result2,seList:result3,salestargets:result,userId:sess.user_id,userType:sess.user_type,username:sess.username,userImg:sess.user_img});
+            });
+          });
+        });
+      }else{
+        return res.redirect('/login');
+      } 
+    }
+  }else{
+    var GETPERFORMANCE = "SELECT * FROM sales_target";
+    var dltSQL="select a.USER_ID,a.LOGON_ID1,d.FIRSTNAME,d.LASTNAME from user a join usrrole b on b.USER_ID=a.USER_ID"+
+          " join role c on c.ROLE_ID=b.ROLE_ID join address d on d.MEMBER_ID=a.USER_ID "+
+          " WHERE a.STATUS='1' and c.IDENTIFIER IN ('DT','DL')";
+    var seSQL="select a.USER_ID,a.LOGON_ID1,d.FIRSTNAME,d.LASTNAME from user a join usrrole b on b.USER_ID=a.USER_ID"+
+          " join role c on c.ROLE_ID=b.ROLE_ID join address d on d.MEMBER_ID=a.USER_ID "+
+          " WHERE a.STATUS='1' and c.IDENTIFIER IN ('SE')";
+    if(sess === undefined){
+      return res.redirect('/login');
+    }else{
+      if(sess.user_type === 'A'){
+        db.query(GETPERFORMANCE, function(err, result) {
+          if (err) {
+            throw err;
+            return res.redirect('/login');
+          }
+          db.query(dltSQL, function(err, result2) {
+            if (err) {
+              throw err;
+              return res.redirect('/login');
+            }
+            db.query(seSQL, function(err, result3) {
+              if (err) {
+                throw err;
+                return res.redirect('/login');
+              }
+              res.render('_sales_target',{ dldtList:result2,seList:result3,salestargets:result,userId:sess.user_id,userType:sess.user_type,username:sess.username,userImg:sess.user_img});
+            });
+          });
+        });
+      }else{
+        return res.redirect('/login');
+      } 
+    }
+  }
+});
+
+router.post('/update_sales_target', function(req, res, next) {
+  var sess = req.session;
+  var targetid=req.body.salesTargetId;
+
+  var updates_sales_target = "update sales_target set SALES_TARGET_STATUS = 1, UPDATETIME = CURRENT_TIMESTAMP where id ="+targetid+"";
+  if(sess === undefined){
+    return res.redirect('/login');
+  }else{
+    if(sess.user_type === 'A'){
+      db.query(updates_sales_target, function(err, result) {
+        if (err) {
+          throw err;
+          return res.redirect('/login');
+        }
+        return res.redirect('/sale_target');
+      });
+    }else{
+      return res.redirect('/login');
+    } 
+  }
+});
+
+
+router.post('/add_sales_target', function(req, res, next) {
+  var sess = req.session;
+  var dldtid=req.body.dldt;
+  var seid = req.body.se;
+  var sales_target_amount = req.body.sales_target_amount;
+  var user_id = 0;
+  console.log("in insertion of sales target ---------------");
+  console.log('dldt id');
+  console.log(dldtid);
+  console.log('se id');
+  console.log(seid);
+  console.log('sales target amount');
+  console.log(sales_target_amount);
+  if(sess === undefined){
+    return res.redirect('/login');
+  }else{
+  if(seid != undefined){
+    user_id = seid;
+    var ApprovedOrderSQL="select COUNT(a.ORDER_ID) AS ORDERCOUNT,(CASE WHEN SUM(a.TOTAL) IS NULL THEN 0 ELSE SUM(a.TOTAL) END) AS ORDERTOTAL from orders a "+
+        " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for"+
+        " join user d on d.USER_ID=a.member_id_for join address e on e.member_id=d.USER_ID "+
+        " where a.member_id="+seid+" and a.STATUS='A'";
+  }else{
+    user_id = dldtid;
+    var ApprovedOrderSQL="select COUNT(a.ORDER_ID) AS ORDERCOUNT,(CASE WHEN SUM(a.TOTAL) IS NULL THEN 0 ELSE SUM(a.TOTAL) END) AS ORDERTOTAL from orders a "+
+    " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for "+
+    " join user d on d.USER_ID=a.member_id join address e on e.member_id=d.USER_ID "+
+    " where c.member_id="+dldtid+" AND a.STATUS='A'";
+  }
+
+
+  db.query(ApprovedOrderSQL, function(err, result) {
+    if (err) {
+      throw err;
+      return res.redirect('/login');
+    }
+    result.forEach(function(data){
+      ordertotal=data.ORDERTOTAL;
+      console.log(ordertotal);
+      var get_user_logon_id = "select LOGON_ID1 from user where USER_ID="+user_id+"";
+      db.query(get_user_logon_id, function(err, users) {
+        users.forEach(function(user){
+          var login_id  = user.LOGON_ID1;
+          add_sales_target = "insert into sales_target (user_id, USER_LOGIN_ID,SALES_TARGET,SALES_ACHIEVED,SALES_TARGET_STATUS,CREATETIME, UPDATETIME) values ('"+user_id+"','"+login_id+"','"+sales_target_amount+"','"+ordertotal+"', 0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)";
+          db.query(add_sales_target, function(err, result) {
+            if (err) {
+              throw err;
+              return res.redirect('/login');
+            }
+            return res.redirect('/sale_target');
+          });
+        })
+      });
+     
+    });
+  });
+
+}
+ 
+
+  
+
+});
 /* dashboard console. */
 router.get('/orderdtl/:id', function(req, res, next) {
   var sess=req.session;
@@ -608,6 +825,8 @@ router.get('/profile', function(req, res, next) {
     }
   }
 });
+
+
 
 /* dashboard console. */
 router.get('/create_dl', function(req, res, next) {
@@ -956,6 +1175,72 @@ router.get('/orders', function(req, res, next) {
          });
     }
   }
+});
+
+/* payment status */
+router.get('/order_payment_status', function(req, res, next) {
+  var sess=req.session;
+  var orderSQ="";
+  if(sess === undefined){
+    return res.redirect('/login');
+  }else{
+    if(sess.user_type !='HOD' && sess.user_type !='A' && sess.user_type !='DT' && sess.user_type !='DL'
+        && sess.user_type !='SE'){
+      return res.redirect('/login');
+    }else{
+      if(sess.user_type =='DT' || sess.user_type =='DL'){
+         orderSQL="select a.order_id,a.status,a.MEMBER_ID,a.MEMBER_ID_FOR,a.PAYMENT_DUE_DAYS_COUNT,a.PAYMENT_CLEARANCE_STATUS,a.UPDATETIME, c.FIRSTNAME,c.LASTNAME,c.EMAIL1,c.MOBILE1,c.MOBILE1CODE,c.PHONE1,"+
+        " c.company,c.gstin,c.AADHAARID,c.VOTERID,c.DL,c.PANNO,c.PASSPORTID,c.ADDRESSLINE1,c.ADDRESSFOR,c.ADDRESSTYPE,a.CREATETIME,a.UPDATETIME,a.TOTAL "+
+        " ,c.city,c.state,c.COUNTRY,c.zipcode,d.USER_ID AS CUSER_ID,d.LOGON_ID1 AS CLOGON_ID1,e.FIRSTNAME as CFIRSTNAME,e.LASTNAME as CLASTNAME from orders a "+
+         " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for "+
+         " join user d on d.USER_ID=a.member_id join address e on e.member_id=d.USER_ID "+
+         " where c.member_id="+sess.user_id+" and a.STATUS = 'D' order by a.CREATETIME desc";
+      }else if(sess.user_type =='SE'){
+        orderSQL="select a.order_id,a.status,a.MEMBER_ID,a.MEMBER_ID_FOR,a.PAYMENT_DUE_DAYS_COUNT,a.PAYMENT_CLEARANCE_STATUS,a.UPDATETIME,c.FIRSTNAME,c.LASTNAME,c.EMAIL1,c.MOBILE1,c.MOBILE1CODE,c.PHONE1,"+
+        " c.company,c.gstin,c.AADHAARID,c.VOTERID,c.DL,c.PANNO,c.PASSPORTID,c.ADDRESSLINE1,c.ADDRESSFOR,c.ADDRESSTYPE,a.CREATETIME,a.UPDATETIME,a.TOTAL "+
+        " ,c.city,c.state,c.COUNTRY,c.zipcode,d.USER_ID AS CUSER_ID,d.LOGON_ID1 AS CLOGON_ID1,e.FIRSTNAME as CFIRSTNAME,e.LASTNAME as CLASTNAME from orders a "+
+        " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for "+
+        " join user d on d.USER_ID=a.member_id_for join address e on e.member_id=d.USER_ID "+
+        " where a.member_id="+sess.user_id+" and a.STATUS = 'D' order by a.CREATETIME desc";
+      }else{
+        orderSQL="select a.order_id,a.status,a.MEMBER_ID,a.MEMBER_ID_FOR, a.PAYMENT_DUE_DAYS_COUNT,a.PAYMENT_CLEARANCE_STATUS,a.UPDATETIME,c.FIRSTNAME,c.LASTNAME,c.EMAIL1,c.MOBILE1,c.MOBILE1CODE,c.PHONE1,"+
+       " c.company,c.gstin,c.AADHAARID,c.VOTERID,c.DL,c.PANNO,c.PASSPORTID,c.ADDRESSLINE1,c.ADDRESSFOR,c.ADDRESSTYPE,a.CREATETIME,a.UPDATETIME,a.TOTAL "+
+       " ,c.city,c.state,c.COUNTRY,c.zipcode,d.USER_ID AS CUSER_ID,d.LOGON_ID1 AS CLOGON_ID1,e.FIRSTNAME as CFIRSTNAME,e.LASTNAME as CLASTNAME from orders a "+
+        " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for"+
+        " join user d on d.USER_ID=a.member_id join address e on e.member_id=d.USER_ID where a.STATUS = 'D' order by a.CREATETIME desc";
+      }
+       db.query(orderSQL, function(err,result) {
+           if (err) {
+             throw err;
+             return res.redirect('/login');
+           }
+            res.render('_order_payment_status',{orders:result,userId:sess.user_id,userType:sess.user_type,moment:moment,username:sess.username,userImg:sess.user_img});
+         });
+    }
+  }
+});
+
+router.post('/update_payment_order_status', function(req, res, next) {
+  var sess = req.session;
+  var orderId=req.body.orderId;
+  var status=req.body.status;
+  var order_payment_status = 0;
+  if(status === 'P'){
+    order_payment_status = 1;
+  }
+
+  if(sess === undefined){
+    return res.redirect('/login');
+  }else{
+  var updateOrderSQL="update orders set PAYMENT_CLEARANCE_STATUS='"+order_payment_status+"',UPDATETIME=CURRENT_TIMESTAMP where order_id="+orderId+"";
+  db.query(updateOrderSQL, function(err,result) {
+    if (err) {
+      throw err;
+      return res.redirect('/login');
+    }
+    res.redirect('/order_payment_status');
+  });
+}
 });
 
 /* orders console. */
@@ -1836,6 +2121,26 @@ router.post('/place_order', function(req, res, next) {
 
 
 
+router.post('/upload_receipt', function(req, res, next) {
+  var sess=req.session;
+
+  const form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files){
+        var orderId = fields.lr_receipt_order_id;
+        var oldPath = files.receiptfile.path;
+        var newPath = "./public/lr_receipts/"+orderId+'.pdf';
+        var rawData = fs.readFileSync(oldPath)
+      
+        fs.writeFile(newPath, rawData, function(err){
+            if(err) console.log(err)
+            return res.redirect('/orders');
+        })
+  })
+  // res.redirect('/orders');
+  
+});
+
+
 /* dashboard update order status. */
 router.post('/update_order_status', function(req, res, next) {
   var sess=req.session;
@@ -1884,7 +2189,19 @@ case 'D':
     return res.redirect('/orders');
   }else{
 
+    console.log('---------------');
+    console.log('---------------');
+    console.log('---------------');
+    console.log('---------------');
+    console.log('---------------');
+    console.log('---------------');
     var updateOrderSQL="update orders set status='"+status+"',UPDATETIME=CURRENT_TIMESTAMP where order_id="+orderId+"";
+    console.log(updateOrderSQL);
+    console.log('---------------');
+    console.log('---------------');
+    console.log('---------------');
+    console.log('---------------');
+    console.log('---------------');
     db.query(updateOrderSQL, function(err,result) {
       if (err) {
           throw err;
@@ -1940,6 +2257,93 @@ case 'D':
                     }else if(status == 'D'){
                      var orderattrSQL="update ordersattr set STATUS='D',DELDQUANTITY='"+recquantity+"',DELDATE='"+recdate+"' WHERE ORDER_ID="+orderId+";"+
                      " insert into payment(ORDER_ID,STATUS,PENDINGFROMDATE,DELAY) value("+orderId+",'P','"+recdate+"','1');";
+
+                    }else if(status === 'A'){
+                      var orderattrSQL="update orders set status='"+status+"',UPDATETIME=CURRENT_TIMESTAMP where order_id="+orderId+"";
+                      //edit here ordertotal
+
+                        var getmembderid_from_order = "SELECT MEMBER_ID from orders where order_id="+orderId+"";
+                        db.query(getmembderid_from_order, function(err, memberid) {
+                            if (err) {
+                              throw err;
+                              return res.redirect('/orders');
+                            }
+                            
+                            memberid.forEach(function(data) {
+                              var memid = data.MEMBER_ID;
+                              var getuserinsalestarget = "select user_id from sales_target where SALES_TARGET_STATUS = 0 AND user_id="+memid+"";
+                              db.query(getuserinsalestarget, function(err, usersintarget) {
+                                if (err) {
+                                  throw err;
+                                  return res.redirect('/orders');
+                                }
+                                usersintarget.forEach(function(data) {
+                                      var getroleid = "select ROLE_ID from usrrole where user_id="+memid+"";
+                                      db.query(getroleid, function(err, roleid) {
+                                        if (err) {
+                                          throw err;
+                                          return res.redirect('/orders');
+                                        }
+                                        roleid.forEach(function(data) {
+                                          var roleid = data.ROLE_ID;
+                                          var getrole = "select IDENTIFIER from role where ROLE_ID="+roleid+"";
+                                            db.query(getrole, function(err, role) {
+                                              if (err) {
+                                                throw err;
+                                                return res.redirect('/orders');
+                                              }
+                                              role.forEach(function(data) {
+                                                var rl = data.IDENTIFIER;
+                                                var user_id = memid;
+                                                  if(rl === 'SE'){
+                                                  
+                                                    var ApprovedOrderSQL="select COUNT(a.ORDER_ID) AS ORDERCOUNT,(CASE WHEN SUM(a.TOTAL) IS NULL THEN 0 ELSE SUM(a.TOTAL) END) AS ORDERTOTAL from orders a "+
+                                                        " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for"+
+                                                        " join user d on d.USER_ID=a.member_id_for join address e on e.member_id=d.USER_ID "+
+                                                        " where a.member_id="+user_id+" and a.STATUS='A'";
+                                                  }else{
+                                                  
+                                                    var ApprovedOrderSQL="select COUNT(a.ORDER_ID) AS ORDERCOUNT,(CASE WHEN SUM(a.TOTAL) IS NULL THEN 0 ELSE SUM(a.TOTAL) END) AS ORDERTOTAL from orders a "+
+                                                    " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for "+
+                                                    " join user d on d.USER_ID=a.member_id join address e on e.member_id=d.USER_ID "+
+                                                    " where c.member_id="+user_id+" AND a.STATUS='A'";
+                                                  }
+      
+                                                  db.query(ApprovedOrderSQL, function(err, result) {
+                                                    if (err) {
+                                                      throw err;
+                                                      return res.redirect('/orders');
+                                                    }
+                                                    result.forEach(function(data){
+                                                      ordertotal=data.ORDERTOTAL;
+                                                      console.log(ordertotal);
+                                                      update_sales_target = "update sales_target set SALES_ACHIEVED ="+ordertotal+" where SALES_TARGET_STATUS = 0 AND user_id="+user_id+"";
+                                                      db.query(update_sales_target, function(err, result) {
+                                                        if (err) {
+                                                          throw err;
+                                                          return res.redirect('/orders');
+                                                        }
+                                                      });
+                                                    });
+                                                  });
+                                              });
+                                            });
+                                        });
+                                      });
+                                });
+
+                              });
+                              
+                            });
+                      });
+
+
+
+
+
+
+
+
 
                     }
                       db.query(orderattrSQL, function(err,result4) {
@@ -2362,7 +2766,7 @@ router.get('/deleteCartItem/cartId/:cartId/cartDtlId/:cartDtlId', function(req, 
          var nameSQL="select FIRSTNAME,LASTNAME from address where MEMBER_ID="+sess.user_id+"";
          var pspareSQL="select a.PSPARE_ID,a.PRODUCT_ID,b.NAME AS PRDNAME, "+
          " a.NAME AS SPNAME,a.DESCRIPTION AS SPDESC,a.IMAGE1 AS SPIMAGE,a.PRICE"+
-         " from pspare a join product b on b.PRODUCT_ID=a.PRODUCT_ID limit 10";
+         " from pspare a join product b on b.PRODUCT_ID=a.PRODUCT_ID";
          db.query(nameSQL, function(err,result) {
              if (err) {
                throw err;
@@ -2380,6 +2784,42 @@ router.get('/deleteCartItem/cartId/:cartId/cartDtlId/:cartDtlId', function(req, 
         }
     }
   });
+
+
+
+
+  router.get('/sparepartremove', function(req, res, next) {
+    var sess=req.session;
+    if(sess === undefined){
+      return res.redirect('/login');
+    }else{
+      if(sess.user_type !='HOD' && sess.user_type !='A' && sess.user_type !='DT' && sess.user_type !='DL'
+          && sess.user_type !='SE'){
+        return res.redirect('/login');
+      }else{
+         var nameSQL="select FIRSTNAME,LASTNAME from address where MEMBER_ID="+sess.user_id+"";
+         var pspareSQL="select a.PSPARE_ID,a.PRODUCT_ID,b.NAME AS PRDNAME, "+
+         " a.NAME AS SPNAME,a.DESCRIPTION AS SPDESC,a.IMAGE1 AS SPIMAGE,a.PRICE"+
+         " from pspare a join product b on b.PRODUCT_ID=a.PRODUCT_ID";
+         db.query(nameSQL, function(err,result) {
+             if (err) {
+               throw err;
+               return res.redirect('/login');
+             }
+             db.query(pspareSQL, function(err,result1) {
+                 if (err) {
+                   throw err;
+                   return res.redirect('/login');
+                 }
+                  res.render('_spare_part_remove',{username:result,pspareList:result1,userId:sess.user_id,userType:sess.user_type,username:sess.username,userImg:sess.user_img});
+               });
+
+           });
+        }
+    }
+  });
+
+
 
   /* dashboard console spare part. */
   router.get('/sparepart/pageNo/:pageNo', function(req, res, next) {
@@ -2483,6 +2923,48 @@ router.get('/deleteCartItem/cartId/:cartId/cartDtlId/:cartDtlId', function(req, 
     }
   });
 
+  router.get('/sparepartremovebyId/Id/:id', function(req, res, next) {
+    var sess=req.session;
+    var id=req.params.id;
+    if(sess === undefined){
+      return res.redirect('/login');
+    }else{
+      if(sess.user_type !='HOD' && sess.user_type !='A' && sess.user_type !='DT' && sess.user_type !='DL'
+          && sess.user_type !='SE'){
+        return res.redirect('/login');
+      }else{
+         var nameSQL="select FIRSTNAME,LASTNAME from address where MEMBER_ID="+sess.user_id+"";
+         var removeSparePartSql = "delete from pspare where PSPARE_ID="+id+"";
+         var pspareSQL="select a.PSPARE_ID,a.PRODUCT_ID,b.NAME AS PRDNAME, "+
+         " a.NAME AS SPNAME,a.DESCRIPTION AS SPDESC,a.IMAGE1 AS SPIMAGE,a.PRICE"+
+         " from pspare a join product b on b.PRODUCT_ID=a.PRODUCT_ID";
+         db.query(nameSQL, function(err,result) {
+             if (err) {
+               throw err;
+               return res.redirect('/login');
+             }
+
+             db.query(removeSparePartSql, function(err, revresult){
+              if (err) {
+                throw err;
+                return res.redirect('/login');
+              }
+              db.query(pspareSQL, function(err,result1) {
+                if (err) {
+                  throw err;
+                  return res.redirect('/login');
+                }
+                 res.render('_spare_part_remove',{username:result,pspareList:result1,userId:sess.user_id,userType:sess.user_type,username:sess.username,userImg:sess.user_img});
+              });
+             });
+           });
+        }
+    }
+  });
+
+
+  
+
   /* dashboard console spart part create. */
   router.get('/sparepart_cr', function(req, res, next) {
     var sess=req.session;
@@ -2584,14 +3066,14 @@ router.get('/deleteCartItem/cartId/:cartId/cartDtlId/:cartDtlId', function(req, 
                throw err;
                return res.redirect('/login');
              }
-             var mapSQL="select a.USRREL_ID,b.USER_ID as dlt_user_id,b.LOGON_ID1 as dlt_logon,e.IDENTIFIER as dlt_role,"+
+             var mapSQL="select a.USRREL_ID as dlt_user_rel_id,b.USER_ID as dlt_user_id,b.LOGON_ID1 as dlt_logon,e.IDENTIFIER as dlt_role,"+
              " h.FIRSTNAME as dlt_fname,h.LASTNAME as dlt_lname,h.company as dlt_company,h.EMAIL1 as dlt_email,h.MOBILE1 as dlt_mobile,c.USER_ID as se_user_id, "+
              " c.LOGON_ID1 as se_logon,g.IDENTIFIER as se_role,i.FIRSTNAME as se_fname,i.LASTNAME as se_lname,i.company as se_company,i.EMAIL1 as se_email,i.MOBILE1 as se_mobile "+
              " from usrrel a join user b on b.USER_ID=a.USER_ID_FROM "+
              " join user c on c.USER_ID=a.USER_ID_TO join usrrole d on d.USER_ID=b.USER_ID"+
              " join role e on e.ROLE_ID=d.ROLE_ID join usrrole f on f.USER_ID=c.USER_ID "+
              " join role g on g.ROLE_ID=f.ROLE_ID join address h on h.MEMBER_ID=b.USER_ID join "+
-             " address i on i.MEMBER_ID=c.USER_ID limit 10";
+             " address i on i.MEMBER_ID=c.USER_ID";
              db.query(mapSQL, function(err,result1) {
                  if (err) {
                    throw err;
@@ -2689,6 +3171,7 @@ router.get('/deleteCartItem/cartId/:cartId/cartDtlId/:cartDtlId', function(req, 
   router.get('/mappingbyId/Id/:id', function(req, res, next) {
     var sess=req.session;
     var id=req.params.id;
+    console.log('------------------------------------------------------')
     if(sess === undefined){
       return res.redirect('/login');
     }else{
@@ -3435,10 +3918,10 @@ router.get('/deleteCartItem/cartId/:cartId/cartDtlId/:cartDtlId', function(req, 
         return res.redirect('/login');
       }else{
         if(sess.user_type =='A' || sess.user_type =='HOD'){
-          enqSQL="select a.ENQUIRY_ID,a.STATUS,a.CREATEDATE,a.NEXTDATE,a.TYPE,a.ISNEW,a.COMMENT,a.QTY,a.QTY_2,a.QTY_3,a.QTY_4,a.QTY_5,a.PRICE,a.PRICE_2,a.PRICE_3,a.PRICE_4,a.PRICE_5,a.IMAGE1,a.IMAGE2,a.IMAGE3,a.IMAGE4,a.IMAGE5,a.IMAGE6,b.LOGON_ID1,c.FIRSTNAME,c.LASTNAME,c.MOBILE1,c.EMAIL1"+
+          enqSQL="select a.ENQUIRY_ID,a.STATUS,a.CREATEDATE,a.NEXTDATE,a.TYPE,a.ISNEW,a.COMMENT,a.QTY,a.QTY_2,a.QTY_3,a.QTY_4,a.QTY_5,a.PRICE,a.PRICE_2,a.PRICE_3,a.PRICE_4,a.PRICE_5,a.IMAGE1,a.IMAGE2,a.IMAGE3,a.IMAGE4,a.IMAGE5,a.IMAGE6,a.ESTIMATED_DELIVERY_DATE,b.LOGON_ID1,c.FIRSTNAME,c.LASTNAME,c.MOBILE1,c.EMAIL1"+
           ", c.ADDRESSLINE1, c.CITY, c.STATE, c.COUNTRY, c.ZIPCODE, c.company, c.gstin from enquiry a join user b on b.USER_ID=a.USER_ID join address c on c.ADDRESS_ID=a.ADDRESS_ID order by a.CREATEDATE";
         }else if(sess.user_type =='SE'){
-          enqSQL="select a.ENQUIRY_ID,a.STATUS,a.CREATEDATE,a.NEXTDATE,a.TYPE,a.ISNEW,a.COMMENT,a.QTY,a.QTY_2,a.QTY_3,a.QTY_4,a.QTY_5,a.PRICE,a.PRICE_2,a.PRICE_3,a.PRICE_4,a.PRICE_5,a.IMAGE1,a.IMAGE2,a.IMAGE3,a.IMAGE4,a.IMAGE5,a.IMAGE6,b.LOGON_ID1,c.FIRSTNAME,c.LASTNAME,c.MOBILE1,c.EMAIL1"+
+          enqSQL="select a.ENQUIRY_ID,a.STATUS,a.CREATEDATE,a.NEXTDATE,a.TYPE,a.ISNEW,a.COMMENT,a.QTY,a.QTY_2,a.QTY_3,a.QTY_4,a.QTY_5,a.PRICE,a.PRICE_2,a.PRICE_3,a.PRICE_4,a.PRICE_5,a.IMAGE1,a.IMAGE2,a.IMAGE3,a.IMAGE4,a.IMAGE5,a.IMAGE6,a.ESTIMATED_DELIVERY_DATE,b.LOGON_ID1,c.FIRSTNAME,c.LASTNAME,c.MOBILE1,c.EMAIL1"+
           ", c.ADDRESSLINE1, c.CITY, c.STATE, c.COUNTRY, c.ZIPCODE, c.company, c.gstin from enquiry a join user b on b.USER_ID=a.USER_ID join address c on c.ADDRESS_ID=a.ADDRESS_ID where a.USER_ID='"+sess.user_id+"' order by a.CREATEDATE";
         }
           db.query(enqSQL, function(err,result) {
@@ -3563,7 +4046,7 @@ router.get('/deleteCartItem/cartId/:cartId/cartDtlId/:cartDtlId', function(req, 
           var prd_sql="select a.ORDER_ID,b.ORDERITEM_ID,b.PRICE,c.NAME,b.QUANTITY,b.TOTAL,b.STOTAL from "+
           " orders a join orderitem b on b.ORDER_ID=a.ORDER_ID join product c on c.PRODUCT_ID=b.PRODUCT_ID "+
           " join productconf d on d.PRODUCT_ID=c.PRODUCT_ID WHERE a.ORDER_ID="+orderid+"";
-          var ord_sql="select a.ORDER_ID,a.TAX,a.TOTAL,a.FIELD1,(select SUM(QUANTITY) from orderitem where ORDER_ID=a.ORDER_ID) TQTY from orders a WHERE a.ORDER_ID="+orderid+"";
+          var ord_sql="select a.REDEEM_POINTS,a.ORDER_ID,a.TAX,a.TOTAL,a.FIELD1,(select SUM(QUANTITY) from orderitem where ORDER_ID=a.ORDER_ID) TQTY from orders a WHERE a.ORDER_ID="+orderid+"";
           var enq_sel_sql="select * from invoice where ORDER_ID="+orderid+"";
 
         db.query(enq_ins_sql, function(err,result1) {
@@ -3724,6 +4207,117 @@ router.post('/complaint_update', function(req, res, next) {
 });
 
 
+router.get('/notifications', function(req, res, next) {
+  var sess=req.session;
+  var get_notifications_query = "select * from notifications where user_id="+sess.user_id+"";
+  db.query(get_notifications_query, function(err, results){
+    if (err) {
+      throw err;
+      return res.redirect('/login');
+    }
+    res.render('_notifications',{notifications:results,userId:sess.user_id,userType:sess.user_type,moment:moment,username:sess.username,userImg:sess.user_img});
+  })
+  
+});
+
+
+router.post('/delete_discount_ads', function(req, res, next) {
+  var sess = req.session;
+  var delete_discount_ad_query = "DELETE from "
+  const form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files){
+        var banner_id = fields.banner_id;
+        var delete_discount_ad_query = "DELETE from discount_ads WHERE id ='"+banner_id+"'";
+        db.query(delete_discount_ad_query, function(err, result){
+          if(err) throw err;
+          return res.redirect('/discount_and_ads');
+        });
+  })
+});
+router.get('/discount_and_ads', function(req, res, next) {
+  var sess = req.session;
+  var get_discount_and_ads_query = "SELECT * FROM discount_ads";
+  db.query(get_discount_and_ads_query, function(err, results){
+    if(err) {
+      throw err;
+      return res.redirect('/login');
+    }
+    res.render('_discount_and_ads',{ banners:results,userId:sess.user_id,userType:sess.user_type,moment:moment,username:sess.username,userImg:sess.user_img});
+  });
+  
+});
+
+router.post('/upload_discount_ad', function(req, res, next){
+  var sess=req.session;
+
+  const form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files){
+        var category = fields.discountadcategory;
+        var oldPath = files.discountadfile.path;
+        var newPath = "./public/discountads/"+files.discountadfile.name;
+        var rawData = fs.readFileSync(oldPath)
+      
+        fs.writeFile(newPath, rawData, function(err){
+            if(err) console.log(err)
+            //return res.redirect('/discount_and_ads');
+        })
+        var insert_discount_ad_query = "insert into discount_ads (filename, CREATETIME, category) values ('"+files.discountadfile.name+"',CURRENT_TIMESTAMP,'"+category+"')";
+        db.query(insert_discount_ad_query, function(err, result){
+          if(err) throw err;
+          return res.redirect('/discount_and_ads');
+        });
+  })
+
+});
+
+
+/* upload product from excel */
+router.get('/upload_products', function(req, res, next) {
+  var sess = req.session;
+  if(sess === undefined){
+    return res.redirect('/login');
+  }else{
+    var path = "./public/product_excel/Item_wise_stock_details.xlsx";
+    
+    readXlsxFile(path).then((rows) => {
+      
+      // skip header
+      rows.shift();
+
+      let products = [];
+
+      rows.forEach((row) => {
+        let product = {
+          sub_group_level_1: row[0],
+          sub_group_level_2: row[1],
+          item_no: row[2],
+          item_description: row[3],
+          in_stock: row[4]
+        };
+
+        products.push(product);
+      });
+      console.log(products);
+      res.render('_upload_products',{ products:products,userId:sess.user_id,userType:sess.user_type,moment:moment,username:sess.username,userImg:sess.user_img});
+    });                                     
+  }
+});
+
+router.post('/upload_product_file', function(req, res, next) {
+  var sess=req.session;
+  const form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files){
+        var oldPath = files.productfile.path;
+        var newPath = "./public/product_excel/Item_wise_stock_details.xlsx";
+        var rawData = fs.readFileSync(oldPath)
+        fs.writeFile(newPath, rawData, function(err){
+            if(err) console.log(err)
+            //return res.redirect('/discount_and_ads');
+        })
+        
+        return res.redirect('/upload_products');
+  })
+});
 
 /* register complaints */
 router.post('/complaints', function(req, res, next) {
@@ -3768,6 +4362,137 @@ router.post('/complaints', function(req, res, next) {
         });
     }
   }
+});
+
+
+
+
+
+router.get('/rewards', function(req, res, next) {
+  var sess=req.session;
+  var orderSQL="";
+  if(sess === undefined){
+    return res.redirect('/login');
+  }else{
+    if(sess.user_type !='HOD' && sess.user_type !='A' && sess.user_type !='DT' && sess.user_type !='DL'
+        && sess.user_type !='SE'){
+      return res.redirect('/login');
+    }else{
+      console.log('user type--------->');
+      console.log(sess.user_type);
+      if(sess.user_type == 'A')
+      {
+        orderSQL="SELECT * FROM rewards WHERE id = 1";
+      }else if(sess.user_type == 'DT' || sess.user_type == 'DL'){
+        orderSQL = "SELECT * FROM user WHERE USER_ID="+sess.user_id+"";
+      }
+      
+       db.query(orderSQL, function(err,result) {
+           if (err) {
+             throw err;
+             return res.redirect('/login');
+           }
+           console.log(result);
+            res.render('_rewards',{rewards:result,userId:sess.user_id,userType:sess.user_type,moment:moment,username:sess.username,userImg:sess.user_img});
+         });
+    }
+  }
+});
+
+router.get('/getrewardpoints', function(req, res, next ){
+  var sess=req.session;
+  var orderSQL="";
+  orderSQL = "SELECT * FROM user WHERE USER_ID="+sess.user_id+"";
+  db.query(orderSQL, function(err,result) {
+    if (err) {
+      throw err;
+    }
+    console.log(result);
+    res.json({'data':result[0].usr_reward_points});
+  });
+});
+
+router.post('/updatecarttotal', function(req, res, next){
+  // var sess =  req.session;
+  var points = req.body.points;
+  var prev_total = req.body.total;
+  var total = req.body.total;
+  var redeem_status = req.body.redeem_status;
+  var cart_id = req.body.cart_id;
+  var cartSQL = "";
+
+
+  console.log(points+' '+total+' '+redeem_status+' '+cart_id);
+  if(redeem_status == 'true')
+  {
+    total =  total - points;
+    cartSQL = "UPDATE cart SET TOTAL ="+total+",REDEEM_POINTS ="+points+" WHERE CART_ID ="+cart_id+"";
+  }else{
+    total = parseInt(total) + parseInt(points);
+    cartSQL = "UPDATE cart SET TOTAL ="+total+",REDEEM_POINTS = 0 WHERE CART_ID ="+cart_id+"";
+  }
+
+
+  
+  db.query(cartSQL, function(err,result) {
+    if (err) {
+      throw err;
+    }
+    console.log(result);
+    return res.redirect('/cart');
+  });
+})
+
+
+router.post('/updaterewardpoints', function(req, res, next){
+  var sess=req.session;
+  var reward_points = req.body.points;
+  var redeem_status = req.body.redeem_status;
+
+  if( redeem_status == 'true'){
+    var updateSQL = "UPDATE user SET usr_reward_points = usr_reward_points - "+reward_points+" WHERE usr_reward_points >= 50 AND USER_ID ="+sess.user_id+"";
+  }else{
+    var updateSQL = "UPDATE user SET usr_reward_points = usr_reward_points + "+reward_points+" WHERE usr_reward_points >= 50 AND USER_ID ="+sess.user_id+"";
+  }
+
+  db.query(updateSQL, function(err, result){
+    if(err) {
+      throw err;
+    }
+    console.log(result);
+    return res.json({'data':result});
+  });
+});
+
+router.post('/update_reward', function(req, res, next) {
+  var sess=req.session;
+  var reward_points = req.body.reward_points;
+  var reward_cost = req.body.reward_cost;
+  var allowed_rewards = req.body.allowed_points;
+  var reward_status = req.body.reward_status;
+  var CREATEDATE = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+  var UPDATETIME = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+
+  if(reward_status === 'Inactive')
+  {
+    reward_status = 'I';
+  }else{
+    reward_status = 'A'
+  }
+
+  var query = 'UPDATE rewards SET reward_point = ?, cost_per_reward = ?, UPDATETIME = ?, STATUS = ?, ALLOWED_REWARD_POINTS = ? WHERE id = 1';
+
+  var values = [
+    [ ]
+  ]
+  db.query(query, [reward_points,reward_cost,UPDATETIME,reward_status,allowed_rewards], function(err,result) {
+    if (err) {
+      throw err;
+      return res.redirect('/login');
+    }
+     return res.redirect('/rewards');
+  });
+
 });
 
 module.exports = router;

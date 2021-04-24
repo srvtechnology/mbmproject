@@ -7,12 +7,17 @@
 <!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
 
 
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
 <link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
 <!-- local style css -->
 <link rel="stylesheet" href="/stylesheets/navbar.css">
 <link rel="stylesheet" href="/stylesheets/index.css">
+
 
 </head>
 <body>
@@ -21,84 +26,72 @@
 <div class="dist-dealer-list section">
 	<div class="container-fluid">
 		<div class="dist-dealer-list-div section-div">
-			<form action="/mappingByName" method="post">
-				<div class="row">
-					<div class="col-6">
-						<div class="form-group">
-							<input type="text" class="form-control" id="identifier" name="name" placeholder="Search">
-						</div>
-						<div class="col-12">
-
-								<button type="submit" class="btn btn-success w-25">SEARCH</button>
-
-						</div>
-					</div>
-				</div>
-			</form>
+			
 			<div class="d-flex justify-content-between mb-2">
 				<h4 class="h4">USER MAPPING <span>LIST</span></h4>
 				<a href="/mapping_cr" class="btn btn-danger btn-create btn-sm">+ Create Mapping</a>
 			</div>
 			<div class="table-div" id="horizontalScroll">
-				<table class="table table-striped">
-				<thead class="thead-light">
+				<table id="basic-datatables" class="display table table-striped table-hover" >
+				<thead>
 					<tr>
-						<th scope="col">First Name(DL/DT)</th>
-						<th scope="col">Last Name(DL/DT)</th>
-						<th scope="col">Shop/Company Name(DL/DT)</th>
-						<th scope="col">Login ID(DL/DT)</th>
-						<th scope="col">Email ID(DL/DT)</th>
-						<th scope="col">Mobile No(DL/DT)</th>
-						<th scope="col">First Name(SE)</th>
-						<th scope="col">Last Name(SE)</th>
-						<th scope="col">Shop/Company Name(SE)</th>
-						<th scope="col">Login ID(SE)</th>
-						<th scope="col">Email ID(SE)</th>
-						<th scope="col">Mobile No(SE)</th>
-						<th scope="col" class="action">Action</th>
+						<th>Mapping ID</th>
+						<th>First Name(SE)</th>
+						<!-- <th>Last Name(SE)</th> -->
+						<th>Login ID(SE)</th>
+						<th>First Name(DL/DT)</th>
+						<!-- <th>Last Name(DL/DT)</th> -->
+						<!-- <th>Shop/Company Name(DL/DT)</th> -->
+						<th>Login ID(DL/DT)</th>
+						<!-- <th>Email ID(DL/DT)</th>
+						<th>Mobile No(DL/DT)</th> -->
+						
+						<!-- <th>Shop/Company Name(SE)</th> -->
+						
+						<!-- <th>Email ID(SE)</th>
+						<th>Mobile No(SE)</th> -->
+						<th class="action">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<% mapList.forEach(function(map){ %>
 					<tr>
-						<td><%= map.dlt_fname %></td>
-						<td><%= map.dlt_lname %></td>
-						<td><%= map.dlt_company %></td>
-						<td><%= map.dlt_logon %></td>
-						<td><%= map.dlt_email %></td>
-						<td><%= map.dlt_mobile %></td>
+						<td><%= map.dlt_user_rel_id%></td>
 						<td><%= map.se_fname %></td>
-						<td><%= map.se_lname %></td>
-						<td><%= map.se_company %></td>
 						<td><%= map.se_logon %></td>
-						<td><%= map.se_email %></td>
-						<td><%= map.se_mobile %></td>
+						<td><%= map.dlt_fname %></td>
+						<!-- <td><%= map.dlt_lname %></td> -->
+						<!-- <td><%= map.dlt_company %></td> -->
+						<td><%= map.dlt_logon %></td>
+						<!-- <td><%= map.dlt_email %></td>
+						<td><%= map.dlt_mobile %></td> -->
+						<!-- <td><%= map.se_fname %></td> -->
+						<!-- <td><%= map.se_lname %></td>
+						<td><%= map.se_company %></td> -->
+						<!-- <td><%= map.se_logon %></td> -->
+						<!-- <td><%= map.se_email %></td>
+						<td><%= map.se_mobile %></td> -->
 						<td>
-							<a href="/mappingbyId/Id/<%= map.USRREL_ID %>" class="btn btn-dark btn-sm">View</a>
+							<a href="/mappingbyId/Id/<%= map.dlt_user_rel_id %>" class="btn btn-dark btn-sm">View</a>
 						</td>
 					</tr>
 					<% }); %>
 				</tbody>
 			</table>
 			</div>
-			<div class="pagination">
-  <a href="/mapping/pageNo/1">&laquo;</a>
-  <a href="/mapping/pageNo/1" class="active">1</a>
-  <a href="/mapping/pageNo/2">2</a>
-  <a href="/mapping/pageNo/3">3</a>
-  <a href="/mapping/pageNo/4">4</a>
-  <a href="/mapping/pageNo/5">5</a>
-  <a href="/mapping/pageNo/6">6</a>
-  <a href="/mapping/pageNo/7">&raquo;</a>
-</div>
+			
 		</div>
 	</div>
 </div>
 </div>
 
+
 <script src="/javascripts/fontawwesome.js"></script>
 <!-- jQuery -->
-<script src="/javascripts/jquery.min.js"></script>
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
 <!-- Popper.js -->
 <script src="/javascripts/popper.js"></script>
 <!-- Bootstrap JS -->
@@ -107,5 +100,11 @@
 <!-- <script src="/javascripts/vii.js"></script> -->
 <!-- app -->
 <script src="/javascripts/app.js"></script>
+<script>
+	$(document).ready(function() {
+		var table = $('#basic-datatables').DataTable();
+		var order = table.order([0,'desc']).draw();
+	});
+</script>
 </body>
 </html>

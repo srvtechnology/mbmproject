@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Orders</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
+<link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="order section">
+	<div class="container-fluid">
+		<div class="order-div section-div">
+			<h4 class="h4">ORDER <span>DETAILS</span></h4>
+			<!-- button div -->
+			<!-- <div class="btn-group btn-group-toggle w-100 mt-2 shadow">
+				<input value="0" type="radio" name="leg" id="option0" onclick="filter('0')" checked>
+				<label class="btn-sm btn btn-light" for="option0">
+					All
+				</label>
+				<input value="R" type="radio" name="leg" onclick="filter('R')" id="option1">
+				<label class="btn-sm btn btn-light" for="option1">
+					Rejected
+				</label>
+				<input value="A" type="radio" name="leg" onclick="filter('A')" id="option2">
+				<label class="btn-sm btn btn-light" for="option2">
+					Approved
+				</label>
+				<input value="I" type="radio" name="leg" onclick="filter('I')" id="option3">
+				<label class="btn-sm btn btn-light" for="option3">
+					In-Progress
+				</label>
+				<input value="D" type="radio" name="leg" onclick="filter('D')" id="option4">
+				<label class="btn-sm btn btn-light" for="option4">
+					Delivered
+				</label>
+				<input value="S" type="radio" name="leg" onclick="filter('S')" id="option5">
+				<label class="btn-sm btn btn-light" for="option5">
+					Shipped
+				</label>
+			</div> -->
+			<i class="dropdown-divider d-block"></i>
+			<!-- <div class="form-group filter-div row">
+				<div class="col-12 text-left">
+			    <label for="quantity" class="filter-label">Filter: </label>
+				</div>
+				<div class="col 12">
+					<form action="/ordersFilter" method="post">
+					<div class="row">
+						<div class="col-5">
+							<input type="date" name="startDate" class="form-control">
+						</div>
+						<div class="col-5">
+							<input type="date" name="endDate" class="form-control">
+						</div>
+						<div class="col-2">
+							<button type="submit" class="btn btn-danger">FILTER</button>
+						</div>
+					</div>
+				</form>
+				</div>
+		  </div> -->
+			<div class="col-md-12">
+		    <div class="card"></div>
+		      <div class="card-header">
+		        <h4 class="card-title">Orders</h4>
+		      </div>
+		      <div class="card-body">
+		        <div class="table-responsive">
+		          <table id="basic-datatables" class="display table table-striped table-hover" >
+		            <thead>
+		              <tr>
+						<th>Id</th>
+						<th>Invoice</th>
+		                <th>Date</th>
+		                <th>Total Value</th>
+		                <th>Status</th>				
+						<th>Payment Due Days</th>
+                        <th>Payment Status</th>
+                        <th>Action</th>
+		              </tr>
+		            </thead>
+		  <tbody>
+				<% var ord_status; %>
+				<% var options=[]; %>
+
+				<% if (orders) { %>
+					<% orders.forEach(function(order){ %>
+
+						<% switch (userType) {
+								case 'HOD' : %>
+
+								<% switch (order.status) {
+									case 'P' : %>
+												<%  ord_status='Pending' %>
+												<%  options = [ "A", "R", "I", "S", "D" ]; %>
+													<% break;
+
+									case 'A' : %>
+											 <% ord_status='Approved' %>
+											 <%  options = ["R", "I", "S", "D" ]; %>
+													<% break;
+
+									case 'I' : %>
+								<%  ord_status='In-Progress' %>
+								<%  options = [ "S", "D" ]; %>
+									<% break;
+
+									case 'S' : %>
+								<%  ord_status='Shipped' %>
+								<%  options = [ "D" ]; %>
+									<% break;
+
+									case 'D' : %>
+								<%  ord_status='Delivered' %>
+								<%  options = [ ]; %>
+									<% break;
+
+									case 'R' : %>
+								<%  ord_status='Rejected' %>
+								<%  options = [ ]; %>
+									<% break;
+							} %>
+
+							 <% break;
+
+							 case 'A' : %>
+
+							 <% switch (order.status) {
+								 case 'P' : %>
+											 <%  ord_status='Pending' %>
+											 <%  options = [ "A", "R", "I", "S", "D" ]; %>
+												 <% break;
+
+								 case 'A' : %>
+											<% ord_status='Approved' %>
+											<%  options = ["R", "I", "S", "D" ]; %>
+												 <% break;
+
+								 case 'I' : %>
+							 <%  ord_status='In-Progress' %>
+							 <%  options = [ "S", "D" ]; %>
+								 <% break;
+
+								 case 'S' : %>
+							 <%  ord_status='Shipped' %>
+							 <%  options = [ "D" ]; %>
+								 <% break;
+
+								 case 'D' : %>
+							 <%  ord_status='Delivered' %>
+							 <%  options = [ ]; %>
+								 <% break;
+
+								 case 'R' : %>
+							 <%  ord_status='Rejected' %>
+							 <%  options = [ ]; %>
+								 <% break;
+						 } %>
+
+							<% break;
+
+							 case 'DL' : %>
+							 <% switch (order.status) {
+								 case 'P' : %>
+											 <%  ord_status='Pending' %>
+											 <%  options = [ "D" ]; %>
+												 <% break;
+
+								 case 'A' : %>
+											<% ord_status='Approved' %>
+											<%  options = [ "D"]; %>
+												 <% break;
+
+								 case 'I' : %>
+							 <%  ord_status='In-Progress' %>
+							 <%  options = [ "D" ]; %>
+								 <% break;
+
+								 case 'S' : %>
+							 <%  ord_status='Shipped' %>
+							 <%  options = [ "D" ]; %>
+								 <% break;
+
+								 case 'D' : %>
+							 <%  ord_status='Delivered' %>
+							 <%  options = [ ]; %>
+								 <% break;
+
+								 case 'R' : %>
+							 <%  ord_status='Rejected' %>
+							 <%  options = [ ]; %>
+								 <% break;
+						 } %>
+							<% break;
+
+							case 'DT' : %>
+
+							<% switch (order.status) {
+								case 'P' : %>
+											<%  ord_status='Pending' %>
+											<%  options = [  ]; %>
+												<% break;
+
+								case 'A' : %>
+										 <% ord_status='Approved' %>
+										 <%  options = [ ]; %>
+												<% break;
+
+								case 'I' : %>
+							<%  ord_status='In-Progress' %>
+							<%  options = [  ]; %>
+								<% break;
+
+								case 'S' : %>
+							<%  ord_status='Shipped' %>
+							<%  options = [ "D" ]; %>
+								<% break;
+
+								case 'D' : %>
+							<%  ord_status='Delivered' %>
+							<%  options = [ ]; %>
+								<% break;
+
+								case 'R' : %>
+							<%  ord_status='Rejected' %>
+							<%  options = [ ]; %>
+								<% break;
+						} %>
+
+						 <% break;
+
+						 case 'SE' : %>
+
+						 <% switch (order.status) {
+							 case 'P' : %>
+										 <%  ord_status='Pending' %>
+										 <%  options = [ ]; %>
+											 <% break;
+
+							 case 'A' : %>
+										<% ord_status='Approved' %>
+										<%  options = [ ]; %>
+											 <% break;
+
+							 case 'I' : %>
+						 <%  ord_status='In-Progress' %>
+						 <%  options = [  ]; %>
+							 <% break;
+
+							 case 'S' : %>
+						 <%  ord_status='Shipped' %>
+						 <%  options = [ "D" ]; %>
+							 <% break;
+
+							 case 'D' : %>
+						 <%  ord_status='Delivered' %>
+						 <%  options = [ ]; %>
+							 <% break;
+
+							 case 'R' : %>
+						 <%  ord_status='Rejected' %>
+						 <%  options = [ ]; %>
+							 <% break;
+					 } %>
+
+						<% break;
+
+						} %>
+
+				<tr>
+					<td scope="row">
+						<a href="/orderdtl/<%= order.order_id %>"><%= order.order_id %></a>
+					</td>
+					<td scope="row">
+						<a class="btn btn-primary" href="/geninvoice/id/<%= order.order_id %>" target="_blank"><%= order.order_id %> Invoice</a>
+					</td>
+					<td><%= moment(order.CREATETIME).format( 'YYYY-MM-DD') %></td>
+					<td>₹<%= order.TOTAL %></td>
+					<td>
+						<p class="td-status rejected"><%= ord_status %></p>
+					</td>
+					<td>
+						<% if (1) { %>
+							<!-- <% if (userType == 'A') { %>
+								<button type="button" onclick="openModel('<%= order.order_id %>','<%= options %>')" class="btn btn-success rounded-0">Update</button>
+							 <% } %> -->
+							<!-- <% switch (order.status) {
+							 case 'S' : %>
+							<a href="/geninvoice/id/<%= order.order_id %>" target="_blank" class="btn btn-primary btn-sm" disabled>Generate Invoice</a>
+							<% if (userType == 'A') { %>
+								<button class="btn btn-warning btn-sm" onclick="uploadReceipt('<%= order.order_id %>')"><b>Upload LR Receipt</b></button>
+							 <% } %>
+							 <% if (userType === 'DL' || userType === 'DT') { %>
+								<a href="/public/lr_receipts/<%= order.order_id %>.pdf" target="_blank" class="btn btn-warning btn-sm"><b>Download LR Receipt</b></a>
+							 <% } %>
+							<% break;
+							case 'D' : %>
+							<br>
+							<% if (userType === 'DL' || userType === 'DT') { %>
+							<button type="button" onclick="openComplainModal('<%= order.order_id %>','<%= userId %>')" class="btn btn-primary rounded-0">Complain</button>
+							
+							<% } %>
+							<% break;
+							 } %> -->
+                             <% var payment_days_count = 0 %>
+                             <% var payment_update_date = order.UPDATETIME %>
+                             <% var today_date = new Date() %>
+                             <% var time_diff = Math.abs(today_date - payment_update_date) %>
+                             <% var days_diff = Math.ceil(time_diff/(1000*60*60*24)) %>
+                             <% var human_readable_date_format = new Date(payment_update_date) %>
+                             <% if (order.status == 'D' && order.PAYMENT_CLEARANCE_STATUS == 0) { %>
+								<%= days_diff %>
+							 <% } %>
+                             <% if (order.status != 'D' && order.PAYMENT_CLEARANCE_STATUS == 0) { %>
+								<%= 'Not Received' %>
+							 <% } %>
+                             <% if (order.PAYMENT_CLEARANCE_STATUS == 1) { %>
+								<button class="btn btn-success btn-sm"><%= 'Payment Received on ' + human_readable_date_format.toDateString() %></button>
+							 <% } %>
+						<% } %>
+					</td>
+                    <td>
+						<% if (1) { %>
+							<!-- <% if (userType == 'A') { %>
+								<button type="button" onclick="openModel('<%= order.order_id %>','<%= options %>')" class="btn btn-success rounded-0">Update</button>
+							 <% } %> -->
+							<!-- <% switch (order.status) {
+							 case 'S' : %>
+							<a href="/geninvoice/id/<%= order.order_id %>" target="_blank" class="btn btn-primary btn-sm" disabled>Generate Invoice</a>
+							<% if (userType == 'A') { %>
+								<button class="btn btn-warning btn-sm" onclick="uploadReceipt('<%= order.order_id %>')"><b>Upload LR Receipt</b></button>
+							 <% } %>
+							 <% if (userType === 'DL' || userType === 'DT') { %>
+								<a href="/public/lr_receipts/<%= order.order_id %>.pdf" target="_blank" class="btn btn-warning btn-sm"><b>Download LR Receipt</b></a>
+							 <% } %>
+							<% break;
+							case 'D' : %>
+							<br>
+							<% if (userType === 'DL' || userType === 'DT') { %>
+							<button type="button" onclick="openComplainModal('<%= order.order_id %>','<%= userId %>')" class="btn btn-primary rounded-0">Complain</button>
+							
+							<% } %>
+							<% break;
+							 } %> -->
+                             <% if (order.PAYMENT_CLEARANCE_STATUS == 0) { %>
+								<button class="td-status rejected"><%= 'Not Cleared' %></button>
+							 <% } %>
+                             <% if (order.PAYMENT_CLEARANCE_STATUS == 1) { %>
+								<button class="btn btn-success btn-sm"><%= 'Payment Received' %></button>
+							 <% } %>
+						<% } %>
+					</td>
+                    <td>
+                        <% if (userType != 'SE') { %>
+							<% if (userType == 'A' && order.PAYMENT_CLEARANCE_STATUS == 0) { %>
+								<button type="button" onclick="openModel('<%= order.order_id %>','<%= options %>')" class="btn btn-success rounded-0">Update</button>
+							 <% } %>
+							<!-- <% switch (order.status) {
+							 case 'S' : %>
+							<a href="/geninvoice/id/<%= order.order_id %>" target="_blank" class="btn btn-primary btn-sm" disabled>Generate Invoice</a>
+							<% if (userType == 'A') { %>
+								<button class="btn btn-warning btn-sm" onclick="uploadReceipt('<%= order.order_id %>')"><b>Upload LR Receipt</b></button>
+							 <% } %>
+							 <% if (userType === 'DL' || userType === 'DT') { %>
+								<a href="/public/lr_receipts/<%= order.order_id %>.pdf" target="_blank" class="btn btn-warning btn-sm"><b>Download LR Receipt</b></a>
+							 <% } %>
+							<% break;
+							case 'D' : %>
+							<br>
+							<% if (userType === 'DL' || userType === 'DT') { %>
+							<button type="button" onclick="openComplainModal('<%= order.order_id %>','<%= userId %>')" class="btn btn-primary rounded-0">Complain</button>
+							
+							<% } %>
+							<% break;
+							 } %> -->
+						<% } %>
+                    </td>
+				</tr>
+				<% }); %>
+				<%} %>
+
+		</tbody>
+		</table>
+		</div>
+		</div>
+		
+		</div>
+		</div>
+	</div>
+</div>
+</div>
+<div id="dialog" title="Status Update" class="modal fade">
+	<div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Submit Order Status</h5>
+		  <button type="button" onclick="closeOrderStatusModal()" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+	<form id="orderaction" method="post" action="/update_payment_order_status">
+		<input type="hidden"  id="modal_orderId" name="orderId" value="">
+		<div class="form-group">
+		    <select id="modal_action" class="form-control" name="status"  onchange="updateShipData()" required>
+		        <option value="" >Select</option>
+		    </select>
+	    </div>
+        <button type="submit" class="btn btn-success">Update</button>
+	</form>
+</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+function filter(val){
+	window.location.href = "http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/ordersByStatus/"+val;
+}
+
+$( function() {
+    $( "#modal_shipdateId" ).datepicker();
+		$( "#modal_recdateId" ).datepicker();
+  } );
+function openModel(orderId,options) {
+
+ var opt_arry=options.split(',');
+  $('#modal_orderId').val(orderId);
+  $('.ship_div').css("display", "none");
+  $('.ship_input').prop("type", "hidden");
+  $('#modal_action')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="">Select</option>');
+    $('#modal_action').append(`<option value="P">Payment Received</option>`);
+    $( "#dialog" ).modal('show');
+	
+  }
+
+  function closeOrderStatusModal()
+  {
+	console.log("closing");
+	$( "#dialog" ).modal().hide();
+	location.reload();
+  }
+  
+
+$(document).ready(function() {
+	var table = $('#basic-datatables').DataTable();
+	var order = table.order([0,'desc']).draw();
+});
+
+function openComplainModal(order_id, userId)
+{
+
+	$('#mbm_order_id').val(order_id);
+	$('#mbm_user_id').val(userId);
+	console.log(order_id);
+	console.log(userId);
+	$('#complaintModal').modal('show');
+}
+
+function uploadReceipt(order_id)
+{
+	console.log(order_id);
+	$('#lr_receipt_order_id').val(order_id);
+	$('#receiptmodal').modal('show');
+	
+}
+
+function downloadReceipt(order_id)
+{
+	$.ajax({
+        url: "/downloadreceipt/orderId/"+order_id,
+        type: 'GET',
+        dataType: 'json', // added data type
+        success: function(res) {
+            console.log(res);
+        }
+    });
+}
+</script>
+</body>
+</html>

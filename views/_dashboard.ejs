@@ -9,7 +9,7 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="/stylesheets/bootstrap.css">
-
+<link rel="stylesheet" href="/snackbar/snackbar.css">
 <!-- local style css -->
 <link rel="stylesheet" href="/stylesheets/navbar.css">
 <link rel="stylesheet" href="/stylesheets/index.css">
@@ -102,12 +102,13 @@
 <div class="wrapper d-flex align-items-stretch">
 <%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
 	<div id="content" class="p-4 p-md-5 pt-5">
+		<div id="snackbar"></div>
 		<% switch (userType) {
 
 			case 'A' : %>
 			<div class="container-fluid dash-panel p-3">
 		<div class="row">
-
+			
 		<div class="col-lg-3 col-md-6 col-6 top-panel">
 			<div class="card">
 				<div class="my-dash-icon">
@@ -670,6 +671,32 @@
 				</a>
 			</div>
 		</div>
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+
+		</div>
+		<div class="col-lg-5 col-md-6 col-6" style="margin: auto;">
+			<div class="card" style="border-radius: 10px;background-color: #b794f6">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<span><b>Target Achieved so far</b></span>
+					<% performance.forEach(function(sale){ %>
+						<p class="h6">Sale Target:<%= sale.SALES_TARGET %></p>
+						<p class="h6">Sale Achieved:<%= sale.SALES_ACHIEVED %></p>
+						<div>
+							<button class="btn btn-warning"><%= ((sale.SALES_ACHIEVED/sale.SALES_TARGET)*100).toFixed(2) %> %</button>
+						</div>
+						
+					
+					<% }); %>
+				</div>
+				<a href="/orders" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+		
 		</div>
 		
 		
@@ -749,7 +776,6 @@ case 'DL' : %>
 			</a>
 		</div>
 	</div>
-
 	</div>
 
 	<div class="row">
@@ -787,6 +813,7 @@ case 'DL' : %>
 				<i class="fas fa-ellipsis-h"></i>
 			</a>
 		</div>
+	</div>
 		<div class="col-lg-3 col-md-6 col-6 top-panel">
 			<div class="card">
 				<div class="my-dash-icon">
@@ -804,6 +831,36 @@ case 'DL' : %>
 				</a>
 			</div>
 		</div>
+	
+		<div class="col-lg-3 col-md-6 col-6 top-panel">
+
+		</div>
+		<div class="col-lg-5 col-md-6 col-6" style="margin: auto;">
+			<div class="card" style="border-radius: 10px;background-color: #b794f6">
+				<div class="my-dash-icon">
+					<i class="fas fa-luggage-cart"></i>
+				</div>
+				<div class="text-div">
+					<span><b>Target Achieved so far</b></span>
+					<% performance.forEach(function(sale){ %>
+						<p class="h6">Sale Target:<%= sale.SALES_TARGET %></p>
+						<p class="h6">Sale Achieved:<%= sale.SALES_ACHIEVED %></p>
+						<div>
+							<button class="btn btn-warning"><%= ((sale.SALES_ACHIEVED/sale.SALES_TARGET)*100).toFixed(2) %> %</button>
+						</div>
+					<% }); %>
+				</div>
+				<a href="/orders" class="option1">
+					<i class="fas fa-ellipsis-h"></i>
+				</a>
+			</div>
+		</div>
+
+		
+
+
+
+		
 	</div>
 	</div>
 
@@ -938,6 +995,36 @@ case 'DT' : %>
 			</a>
 		</div>
 	</div>
+
+
+	<div class="col-lg-3 col-md-6 col-6 top-panel">
+
+	</div>
+	<div class="col-lg-5 col-md-6 col-6" style="margin: auto;">
+		<div class="card" style="border-radius: 10px;background-color: #b794f6">
+			<div class="my-dash-icon">
+				<i class="fas fa-luggage-cart"></i>
+			</div>
+			<div class="text-div">
+				<span><b>Target Achieved so far</b></span>
+				<% performance.forEach(function(sale){ %>
+					<p class="h6">Sale Target:<%= sale.SALES_TARGET %></p>
+					<p class="h6">Sale Achieved:<%= sale.SALES_ACHIEVED %></p>
+					<div>
+						<button class="btn btn-warning"><%= ((sale.SALES_ACHIEVED/sale.SALES_TARGET)*100).toFixed(2) %> %</button>
+					</div>
+					
+				
+				<% }); %>
+			</div>
+			<a href="/orders" class="option1">
+				<i class="fas fa-ellipsis-h"></i>
+			</a>
+		</div>
+	</div>
+
+
+
 	</div>
 
 </div>
@@ -951,6 +1038,7 @@ case 'DT' : %>
 <script src="/javascripts/jquery.js"></script>
 <script src="/javascripts/jquery-ui/jquery-ui.js"></script>
 <script src="/javascripts/fontawwesome.js"></script>
+<script src="/snackbar/snackbarScript.js"></script>
 <!-- jQuery -->
 <!-- Popper.js -->
 <script src="/javascripts/popper.js"></script>
@@ -961,7 +1049,8 @@ case 'DT' : %>
 <!-- app -->
 <script src="/javascripts/app.js"></script>
 <script>
-
+	var userType = '<%= userType %>';
+	welcomeAdmin(userType);
 </script>
 </body>
 </html>

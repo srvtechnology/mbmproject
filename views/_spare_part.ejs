@@ -7,8 +7,12 @@
 <!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
 
 
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
 <link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
 <!-- local style css -->
 <link rel="stylesheet" href="/stylesheets/navbar.css">
@@ -21,7 +25,7 @@
 <div class="dist-dealer-list section">
 	<div class="container-fluid">
 		<div class="dist-dealer-list-div section-div">
-			<form action="/sparepartByName" method="post">
+			<!-- <form action="/sparepartByName" method="post">
 				<div class="row">
 					<div class="col-6">
 						<div class="form-group">
@@ -34,20 +38,21 @@
 						</div>
 					</div>
 				</div>
-			</form>
+			</form> -->
 			<div class="d-flex justify-content-between mb-2">
 				<h4 class="h4">SPAREPART <span>LIST</span></h4>
 				<a href="/sparepart_cr" class="btn btn-danger btn-create btn-sm">+ Create Sparepart</a>
 			</div>
-			<div class="table-div" id="horizontalScroll">
-				<table class="table table-striped">
-				<thead class="thead-light">
+			<div class="card-body">
+			<div class="table-responsive">
+				<table id="basic-datatables" class="display table table-striped table-hover">
+				<thead>
 					<tr>
-						<th scope="col">Id</th>
-						<th scope="col">Name</th>
-						<th scope="col">Price</th>
-						<th scope="col">Product Name</th>
-						<th scope="col" class="action">Action</th>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Price</th>
+						<th>Product Name</th>
+						<th class="action">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -65,7 +70,8 @@
 				</tbody>
 			</table>
 			</div>
-			<div class="pagination">
+			</div>
+			<!-- <div class="pagination">
   <a href="/sparepart/pageNo/1">&laquo;</a>
   <a href="/sparepart/pageNo/1" class="active">1</a>
   <a href="/sparepart/pageNo/2">2</a>
@@ -74,7 +80,7 @@
   <a href="/sparepart/pageNo/5">5</a>
   <a href="/sparepart/pageNo/6">6</a>
   <a href="/sparepart/pageNo/7">&raquo;</a>
-</div>
+</div> -->
 		</div>
 	</div>
 </div>
@@ -83,6 +89,11 @@
 <script src="/javascripts/fontawwesome.js"></script>
 <!-- jQuery -->
 <script src="/javascripts/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
 <!-- Popper.js -->
 <script src="/javascripts/popper.js"></script>
 <!-- Bootstrap JS -->
@@ -91,5 +102,11 @@
 <!-- <script src="/javascripts/vii.js"></script> -->
 <!-- app -->
 <script src="/javascripts/app.js"></script>
+<script>
+	$(document).ready(function() {
+	$('#basic-datatables').DataTable({
+	});
+});
+</script>
 </body>
 </html>

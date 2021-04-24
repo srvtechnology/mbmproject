@@ -19,12 +19,15 @@
 <div class="wrapper d-flex align-items-stretch">
 <%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
 <div class="add-update section">
-	<div class="container-fluid">
-		<div class="add-update-div section-div">
+	<div style="
+	width:100%;
+	display: flex;
+	justify-content: center;">
+		<div>
 			<h4 class="h4">ADD <span>USER MAPPING</span></h4>
-			<form id="mapping_form" action="/mapping_cr_post" method="post">
+			<form style="margin-left: 20rem;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);padding: 5rem;" id="mapping_form" action="/mapping_cr_post" method="post">
 				<input type="hidden" name="_csrf-backend" value="lMFvBr9BvDuVt3KbMU7QH2032ayJFXWy0fy-7ugetLfu8yo23jL0X9qEIMt2F7ROWlao2sVhR_O3le6MolPu8Q==">
-					<div class="col-6">
+					<div class="col-12">
 						<div class="form-group">
 							<label for="edit-dltId">Dealer/Distributor</label>
 							<select class="form-control" id="edit-dltId" name="dltId" placeholder="Dealer/Distributor" required>
@@ -34,7 +37,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="col-6">
+					<div class="col-12">
 						<div class="form-group">
 							<label for="edit-seId">Sales Executive</label>
 							<select class="form-control" id="edit-seId" name="seId" placeholder="Sales Executive" required>
@@ -45,7 +48,7 @@
 						</div>
 					</div>
 					<div class="col-12">
-						<button type="submit" class="btn btn-success w-25">SAVE</button>
+						<button type="submit" class="btn btn-success">SAVE</button>
 					</div>
 				</div>
 			</form>

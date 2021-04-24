@@ -83,9 +83,9 @@
 							<label for="add-country">Country</label>
 							<select class="form-control" name="country" id="add-country" onchange="getState('create_dt_form')" required>
 								<option value="" selected>Choose....</option>
-								<option value="China">China</option>
+								<!-- <option value="China">China</option> -->
 								<option value="India">India</option>
-								<option value="USA">USA</option>
+								<!-- <option value="USA">USA</option> -->
 							</select>
 						</div>
 					</div>
@@ -158,11 +158,12 @@
 function getState(formId){
   var country=jQuery("#"+formId+" select[name='country']").val();
   jQuery.ajax({
-  url: 'http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/regAct/getJurst/country/'+country,
+  url: '/regAct/getJurst/country/'+country,
   //url: 'http://localhost:3000/regAct/getJurst/country/'+country,
   contentType: "application/json",
   dataType: 'json',
   success: function(result){
+	  console.log(result);
     var obj=result.data;
     jQuery("#"+formId+" select[name='state']").empty();
     jQuery("#"+formId+" select[name='state']").append(jQuery("<option value=''></option>"));
@@ -175,7 +176,8 @@ function getState(formId){
 function getCity(formId){
   var state=jQuery("#"+formId+" select[name='state']").val();
   jQuery.ajax({
-  url: 'http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/regAct/getJurst/state/'+state,
+	  
+  url: '/regAct/getJurst/state/'+state,
 //	url: 'http://localhost:3000/regAct/getJurst/state/'+state,
   contentType: "application/json",
   dataType: 'json',

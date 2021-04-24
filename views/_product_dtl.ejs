@@ -13,7 +13,7 @@
 <!-- local style css -->
 <link rel="stylesheet"href="/stylesheets/navbar.css">
 <link rel="stylesheet"href="/stylesheets/index.css">
-
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 <div class="wrapper d-flex align-items-stretch">
@@ -35,28 +35,32 @@
 					<div class="border-line"></div>
 					<div class="prod-info">
 						<h5 class="h5"><%= product.NAME %></h5>
-						<p><b>Product Code: </b>MBM001</p>
-						<p><b>Reward Points: </b>0</p>
+						<!-- <p><b>Product Code: </b>MBM001</p>
+						<p><b>Reward Points: </b>0</p> -->
 						<p><b>Availability: </b>Last <%= product.INVENTORY %> only</p>
 						<div class="price">
 							<b>Price:</b>
 							<p class="col-red">₹  <%= product.OFFERPRICE %></p>
 							<p class="stirked">₹  <%= product.LISTPRICE %></p>
 						</div>
+					
+							<div id="spare_parts_add">
+								
+							</div>	
 						<i class="dropdown-divider d-block"></i>
 						<div class="form-group d-flex justify-content-between">
 					    <label for="quantity" class="quant">Quantity: </label>
-					    <input type="number" class="form-control w-50" min="1" step="1" value="1" id="quantity" placeholder="Enter quantity...">
+					    <input type="number" class="form-control w-50" min="1" step="1"  id="quantity" placeholder="Enter quantity...">
 					  </div>
 						<h6 class="h6">Accessories</h6>
 						<% spList.forEach(function(sp){ %>
 						<div class="btn-group btn-group-toggle w-100 mt-2">
-					    <input value="sd" type="radio" name="leg" id="option1" checked>
-						  <label class="btn-sm btn btn-secondary active" for="option1">
+					    <input value="sd" type="radio" onchange="selectSpare('<%= JSON.stringify(sp) %>')" name="<%= sp.NAME %>" id="<%= sp.NAME %>">
+						  <label class="btn-sm btn btn-secondary active" for="<%= sp.NAME %>">
 						    With <%= sp.NAME %> (+₹<%= sp.PRICE %>)
 						  </label>
-					    <input value="sd" type="radio"name="leg" id="option2">
-						  <label class="btn-sm btn btn-secondary" for="option2">
+					    <input value="sd" type="radio" onchange="removeSpare('<%= JSON.stringify(sp) %>')" name="<%= sp.NAME %>" id="no_<%= sp.NAME %>">
+						  <label class="btn-sm btn btn-secondary" for="no_<%= sp.NAME %>">
 						    No <%= sp.NAME %>
 						  </label>
 						</div>
@@ -69,9 +73,9 @@
 								<input type="hidden"  id="prdId" name="prdId" value="<%= product.PRODUCT_ID %>">
 								<input type="hidden"  id="price" name="price" value="<%= product.OFFERPRICE %>">
 								<input type="hidden"  id="total" name="total" value="<%= product.OFFERPRICE %>">
-								<input type="hidden"  id="spid" name="spid" value="0">
+								<!-- <input type="hidden"  id="spid" name="spid" value="0"> -->
 							<input type="hidden" id="qtyID" name="qty" value="1" class="span1" >
-							<button type="submit" class="btn btn-success w-50">Order now!</button>
+							<button  type="submit" class="btn btn-success w-50">Order now!</button>
 						 </form>
 							 <% break;
 
@@ -81,9 +85,9 @@
 								<input type="hidden"  id="prdId" name="prdId" value="<%= product.PRODUCT_ID %>">
 								<input type="hidden"  id="price" name="price" value="<%= product.OFFERPRICE %>">
 								<input type="hidden"  id="total" name="total" value="<%= product.OFFERPRICE %>">
-								<input type="hidden"  id="spid" name="spid" value="0">
+								<!-- <input type="hidden"  id="spid" name="spid" value="2"> -->
 							<input type="hidden" id="qtyID" name="qty" value="1" class="span1" >
-							<button type="submit" class="btn btn-success w-50">Order now!</button>
+							<button  type="submit" class="btn btn-success w-50">Order now!</button>
 						 </form>
 							<% break;
 
@@ -93,9 +97,9 @@
 								<input type="hidden"  id="prdId" name="prdId" value="<%= product.PRODUCT_ID %>">
 								<input type="hidden"  id="price" name="price" value="<%= product.OFFERPRICE %>">
 								<input type="hidden"  id="total" name="total" value="<%= product.OFFERPRICE %>">
-								<input type="hidden"   id="spid" name="spid" value="0">
+								<!-- <input type="hidden"   id="spid" name="spid" value="2"> -->
 							<input type="hidden" id="qtyID" name="qty" value="1" class="span1" >
-							<button type="submit" class="btn btn-success w-50">Order now!</button>
+							<button  type="submit" class="btn btn-success w-50">Order now!</button>
 						 </form>
 							<% break;
 						} %>
@@ -111,6 +115,7 @@
 				  </li>
 				</ul>
 				<div class="tab-content" id="pills-tabContent">
+					<button style="display: none;" id="" class="btn-block btn-primary" onclick="show_random_toast();">Show Random Toast</button>
 				  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
 				  	<%= product.DESCRIPTION %>
 				  </div>
@@ -151,5 +156,80 @@
 <!-- <script src="/javascripts/vii.js"></script> -->
 <!-- app -->
 <script src="/javascripts/app.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+	var product_inventory_amount = <%-JSON.stringify(prdList)%>;
+	console.log(product_inventory_amount[0].INVENTORY);
+	console.log($('#quantity').val());
+	$('#quantity').val(1);
+	$("#quantity").change(function(){
+		console.log($('#quantity').val());
+		var inv_quantity = product_inventory_amount[0].INVENTORY;
+		var quant = $('#quantity').val();
+		if (quant > inv_quantity) {
+			$(":submit").attr("disabled", true);
+			show_random_toast();
+		} else {
+			$(":submit").removeAttr("disabled");
+		}
+	});
+	
+	function selectSpare(sp)
+	{
+		sp_data = JSON.parse(sp);
+		console.log(sp_data);
+		console.log(sp_data.NAME);
+		console.log(sp_data.PRICE);
+		var price = sp_data.PRICE;
+
+		$('#spare_parts_add').append('<p id="'+sp_data.NAME+'_spare'+'" class="col-red">+ ₹ '+price+'</p>');
+		$('#orderaction').append('<input type="hidden" id="spid" name="spid" value="'+sp_data.PSPARE_ID+'">');
+	}
+
+	function removeSpare(sp)
+	{
+		sp_data = JSON.parse(sp);
+		console.log(sp_data);
+		$('#'+sp_data.NAME+'_spare').remove();
+	}
+
+
+	(function(b){b.toast=function(a,h,g,l,k){b("#toast-container").length||(b("body").prepend('<div id="toast-container" aria-live="polite" aria-atomic="true"></div>'),b("#toast-container").append('<div id="toast-wrapper"></div>'));var c="",d="",e="text-muted",f="",m="object"===typeof a?a.title||"":a||"Notice!";h="object"===typeof a?a.subtitle||"":h||"";g="object"===typeof a?a.content||"":g||"";k="object"===typeof a?a.delay||3E3:k||3E3;switch("object"===typeof a?a.type||"":l||"info"){case "info":c="bg-info";
+f=e=d="text-white";break;case "success":c="bg-success";f=e=d="text-white";break;case "warning":case "warn":c="bg-warning";f=e=d="text-white";break;case "error":case "danger":c="bg-danger",f=e=d="text-white"}a='<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="'+k+'">'+('<div class="toast-header '+c+" "+d+'">')+('<strong class="mr-auto">'+m+"</strong>");a+='<small class="'+e+'">'+h+"</small>";a+='<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">';
+a+='<span aria-hidden="true" class="'+f+'">&times;</span>';a+="</button>";a+="</div>";""!==g&&(a+='<div class="toast-body">',a+=g,a+="</div>");a+="</div>";b("#toast-wrapper").append(a);b("#toast-wrapper .toast:last").toast("show")}})(jQuery);
+
+
+const TYPES = ['info'],
+      TITLES = {
+        'info': 'Notice!',
+        // 'success': 'Awesome!',
+        // 'warning': 'Watch Out!',
+        // 'error': 'Doh!'
+      },
+      CONTENT = {
+        'info': 'Order quantity is more than current instock product Quantity',
+        // 'success': 'The action has been completed.',
+        // 'warning': 'It\'s all about to go wrong',
+        // 'error': 'It all went wrong.'
+      };
+
+function show_random_toast()
+{
+  let type = TYPES[Math.floor(Math.random() * TYPES.length)],
+      title = TITLES[type],
+      content = CONTENT[type];
+
+  $.toast({
+    title: 'Notice!',
+    subtitle: 'Now',
+    content: 'Order quantity is more than current instock product Quantity',
+    type: 'danger',
+    delay: 5000
+  });
+}
+</script>
 </body>
 </html>

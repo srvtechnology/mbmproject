@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spare Parts</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
+<link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="dist-dealer-list section">
+	<div class="container-fluid">
+		<div class="dist-dealer-list-div section-div">
+			<!-- <form action="/sparepartByName" method="post">
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<input type="text" class="form-control" id="identifier" name="name" placeholder="Search">
+						</div>
+						<div class="col-12">
+
+								<button type="submit" class="btn btn-success w-25">SEARCH</button>
+
+						</div>
+					</div>
+				</div>
+			</form> -->
+			<div class="d-flex justify-content-between mb-2">
+				<h4 class="h4">SPAREPART <span>LIST</span></h4>
+				<!-- <a href="/sparepart_cr" class="btn btn-danger btn-create btn-sm">+ Create Sparepart</a> -->
+			</div>
+			<div class="card-body">
+			<div class="table-responsive">
+				<table id="basic-datatables" class="display table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Price</th>
+						<th>Product Name</th>
+						<th class="action">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% pspareList.forEach(function(pspare){ %>
+					<tr>
+						<td><%= pspare.PSPARE_ID %></td>
+						<td><%= pspare.SPNAME %></td>
+						<td><%= pspare.PRICE %></td>
+						<td><a href="/productdtl/<%= pspare.PRODUCT_ID %>"><%= pspare.PRDNAME %></a></td>
+						<td>
+							<a href="/sparepartremovebyId/Id/<%= pspare.PSPARE_ID %>" class="btn btn-danger btn-sm">Remove</a>
+						</td>
+					</tr>
+					<% }); %>
+				</tbody>
+			</table>
+			</div>
+			</div>
+			<!-- <div class="pagination">
+  <a href="/sparepart/pageNo/1">&laquo;</a>
+  <a href="/sparepart/pageNo/1" class="active">1</a>
+  <a href="/sparepart/pageNo/2">2</a>
+  <a href="/sparepart/pageNo/3">3</a>
+  <a href="/sparepart/pageNo/4">4</a>
+  <a href="/sparepart/pageNo/5">5</a>
+  <a href="/sparepart/pageNo/6">6</a>
+  <a href="/sparepart/pageNo/7">&raquo;</a>
+</div> -->
+		</div>
+	</div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+	$(document).ready(function() {
+	$('#basic-datatables').DataTable({
+	});
+});
+</script>
+</body>
+</html>

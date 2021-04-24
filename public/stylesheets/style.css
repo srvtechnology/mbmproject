@@ -28,6 +28,11 @@ a {
 /*********
 GLOBAL
 *********/
+.reward_status {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .d-flex {
 	display: flex;
 }

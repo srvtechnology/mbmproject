@@ -26,7 +26,7 @@
 		<div class="order-div section-div">
 			<h4 class="h4">ORDER <span>DETAILS</span></h4>
 			<!-- button div -->
-			<div class="btn-group btn-group-toggle w-100 mt-2 shadow">
+			<!-- <div class="btn-group btn-group-toggle w-100 mt-2 shadow">
 				<input value="0" type="radio" name="leg" id="option0" onclick="filter('0')" checked>
 				<label class="btn-sm btn btn-light" for="option0">
 					All
@@ -51,9 +51,9 @@
 				<label class="btn-sm btn btn-light" for="option5">
 					Shipped
 				</label>
-			</div>
+			</div> -->
 			<i class="dropdown-divider d-block"></i>
-			<div class="form-group filter-div row">
+			<!-- <div class="form-group filter-div row">
 				<div class="col-12 text-left">
 			    <label for="quantity" class="filter-label">Filter: </label>
 				</div>
@@ -72,9 +72,9 @@
 					</div>
 				</form>
 				</div>
-		  </div>
+		  </div> -->
 			<div class="col-md-12">
-		    <div class="card">
+		    <div class="card"></div>
 		      <div class="card-header">
 		        <h4 class="card-title">Orders</h4>
 		      </div>
@@ -295,14 +295,25 @@
 					</td>
 					<td>
 						<% if (userType != 'SE') { %>
-	 						<button type="button" onclick="openModel('<%= order.order_id %>','<%= options %>')" class="btn btn-success rounded-0">Update</button>
+							<% if (userType == 'A') { %>
+								<button type="button" onclick="openModel('<%= order.order_id %>','<%= options %>')" class="btn btn-success rounded-0">Update</button>
+							 <% } %>
 							<% switch (order.status) {
 							 case 'S' : %>
 							<a href="/geninvoice/id/<%= order.order_id %>" target="_blank" class="btn btn-primary btn-sm" disabled>Generate Invoice</a>
+							<% if (userType == 'A') { %>
+								<button class="btn btn-warning btn-sm" onclick="uploadReceipt('<%= order.order_id %>')"><b>Upload LR Receipt</b></button>
+							 <% } %>
+							 <% if (userType === 'DL' || userType === 'DT') { %>
+								<a href="/public/lr_receipts/<%= order.order_id %>.pdf" target="_blank" class="btn btn-warning btn-sm"><b>Download LR Receipt</b></a>
+							 <% } %>
 							<% break;
 							case 'D' : %>
 							<br>
+							<% if (userType === 'DL' || userType === 'DT') { %>
 							<button type="button" onclick="openComplainModal('<%= order.order_id %>','<%= userId %>')" class="btn btn-primary rounded-0">Complain</button>
+							
+							<% } %>
 							<% break;
 							 } %>
 						<% } %>
@@ -315,36 +326,83 @@
 		</table>
 		</div>
 		</div>
-		</div>
+		
 		</div>
 		</div>
 	</div>
 </div>
 </div>
-<div id="dialog" title="Status Update" class="ui-dialog" style="display:none;">
+<div id="dialog" title="Status Update" class="modal fade">
+	<div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Submit Order Status</h5>
+		  <button type="button" onclick="closeOrderStatusModal()" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
 	<form id="orderaction" method="post" action="/update_order_status">
 		<input type="hidden"  id="modal_orderId" name="orderId" value="">
-		<select id="modal_action" name="status"  onchange="updateShipData()" required>
+		<div class="form-group">
+		<select id="modal_action" class="form-control" name="status"  onchange="updateShipData()" required>
 		<option value="" >Select</option>
 		</select>
+	</div>
 		<div class="ship_div" style="display:none;">
-		<p class="ship_ptag"> Ship Address:<input type="text" class="ship_input" id="modal_shipaddressd" name="shipaddress" value="" placeholder="Ship Address"></p>
-		<p class="ship_ptag"> Ship Partner:<input type="text" class="ship_input" id="modal_shippartnerId" name="shippartner" value="" placeholder="Ship Partner"></p>
-		<p class="ship_ptag"> Ship Type:<input type="text" class="ship_input" id="modal_shiptypeId" name="shiptype" value="" placeholder="Ship Type"></p>
-		<p class="ship_ptag"> Ship Weight:<input type="text" class="ship_input" id="modal_shipweightId" name="shipweight" value="" placeholder="Ship Weight"></p>
-		<p class="ship_ptag"> Ship Quantity:<input type="text" class="ship_input" id="modal_shipquantityId" name="shipquantity" value="" placeholder="Ship Quantity"></p>
-		<p class="ship_ptag"> Ship Number:<input type="text" class="ship_input" id="modal_shipnumberId" name="shipnumber" value="" placeholder="Ship Number"></p>
-		<p class="ship_ptag"> Ship Date:<input type="text" class="ship_input" id="modal_shipdateId" name="shipdate" value="" placeholder="Ship Date"></p>
+			
+				<div class="form-group">
+					<label for="recipient-name" class="col-form-label"> Ship Address:</label>
+					<input type="text" class="form-control" id="modal_shipaddressd" name="shipaddress" value="" placeholder="Ship Address">
+				</div>
+				<div class="form-group">
+					<label for="Ship_Partner" class="col-form-label">Ship Partner:</label>
+					<input type="text" class="form-control" id="modal_shippartnerId" name="shippartner" value="" placeholder="Ship Partner">
+				</div>
+				<div class="form-group">
+					<label for="Ship_Type" class="col-form-label">Ship Type:</label>
+					<input type="text" class="form-control" id="modal_shiptypeId" name="shiptype" value="" placeholder="Ship Type">
+				</div>
+			
+
+			
+				<div class="form-group">
+					<label for="Ship_Weight" class="col-form-label">Ship Weight:</label>
+					<input type="text" class="form-control" id="modal_shipweightId" name="shipweight" value="" placeholder="Ship Weight">
+				</div>
+				<div class="form-group">
+					<label for="Ship_Quantity" class="col-form-label">Ship Quantity:</label>
+					<input type="text" class="form-control" id="modal_shipquantityId" name="shipquantity" value="" placeholder="Ship Quantity">
+				</div>
+				<div class="form-group">
+					<label for="Ship_Number" class="col-form-label">Ship Number:</label>
+					<input type="text" class="form-control" id="modal_shipnumberId" name="shipnumber" value="" placeholder="Ship Number">
+				</div>
+			
+			
+			<div class="form-group">
+				<label for="Ship_Date" class="col-form-label">Ship Date:</label>
+				<input type="text" class="form-control" id="modal_shipdateId" name="shipdate" value="" placeholder="Ship Date">
+			</div>
 	</div>
 	<div class="rec_div" style="display:none;">
-	<p class="rec_ptag"> Name/Code:<input type="text" class="rec_input" id="modal_nameId" name="name" value="" placeholder="" disabled></p>
+	<!-- <p class="rec_ptag"> Name/Code:<input type="text" class="rec_input" id="modal_nameId" name="name" value="" placeholder="" disabled></p>
 	<p class="rec_ptag"> Shipped Quantity:<input type="text" class="rec_input" id="modal_shipquantityId" name="shipquantity" value="" disabled></p>
-	<p class="rec_ptag"> Shipped Date:<input type="text" class="rec_input" id="modal_shipdateId" name="shipdate" value="" disabled></p>
-	<p class="rec_ptag"> Received Quantity:<input type="text" class="rec_input" id="modal_recquantityId" name="recquantity" value="" placeholder="Received Quantity"></p>
-	<p class="rec_ptag"> Received Date:<input type="text" class="rec_input" id="modal_recdateId" name="recdate" value="" placeholder="Received Date"></p>
+	<p class="rec_ptag"> Shipped Date:<input type="text" class="rec_input" id="modal_shipdateId" name="shipdate" value="" disabled></p> -->
+	<div class="form-group">
+		<label for="Received_Quantity" class="col-form-label">Received Quantity:</label>
+		<input type="text" class="form-control" id="modal_recquantityId" name="recquantity" value="" placeholder="Received Quantity">
+	</div>
+	<div class="form-group">
+		<label for="Received_Date" class="col-form-label">Received Date:</label>
+		<input type="text" class="form-control" id="modal_recdateId" name="recdate" value="" placeholder="Received Date">
+	</div>
+	
+	
 </div>
- <button type="submit" class="btn btn-success rounded-0">Update</button>
+ <button type="submit" class="btn btn-success">Update</button>
 	</form>
+</div>
+</div>
 </div>
 
 
@@ -379,6 +437,36 @@
 			<div class="form-group">
 				<label for="message-text" class="col-form-label">Feedback:</label>
 				<input type="text" class="form-control" value="" name="feedback" />
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		  </form>
+		</div>
+		<div class="modal-footer">
+		  
+		</div>
+	  </div>
+	</div>
+  </div>
+
+
+
+
+
+  <div class="modal fade" id="receiptmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Submit LR Receipt</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <form id="receipt" method="POST" action="/upload_receipt" enctype="multipart/form-data">
+			<input type="hidden" id="lr_receipt_order_id" name="lr_receipt_order_id" value="" />
+			<div class="form-group">
+			  <label for="upload_receipt_file" class="col-form-label">Upload Receipt:</label>
+			  <input type="file"  name="receiptfile" accept=".pdf">
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		  </form>
@@ -448,9 +536,17 @@ function openModel(orderId,options) {
     break;
 }
 });
-    $( "#dialog" ).dialog();
+    $( "#dialog" ).modal('show');
+	
   }
 
+  function closeOrderStatusModal()
+  {
+	console.log("closing");
+	$( "#dialog" ).modal().hide();
+	location.reload();
+  }
+  
 function updateShipData(){
   var status=$('#modal_action').val();
   if(status=='S'){
@@ -465,8 +561,8 @@ function updateShipData(){
   }
 }
 $(document).ready(function() {
-	$('#basic-datatables').DataTable({
-	});
+	var table = $('#basic-datatables').DataTable();
+	var order = table.order([0,'desc']).draw();
 });
 
 function openComplainModal(order_id, userId)
@@ -477,6 +573,26 @@ function openComplainModal(order_id, userId)
 	console.log(order_id);
 	console.log(userId);
 	$('#complaintModal').modal('show');
+}
+
+function uploadReceipt(order_id)
+{
+	console.log(order_id);
+	$('#lr_receipt_order_id').val(order_id);
+	$('#receiptmodal').modal('show');
+	
+}
+
+function downloadReceipt(order_id)
+{
+	$.ajax({
+        url: "/downloadreceipt/orderId/"+order_id,
+        type: 'GET',
+        dataType: 'json', // added data type
+        success: function(res) {
+            console.log(res);
+        }
+    });
 }
 </script>
 </body>

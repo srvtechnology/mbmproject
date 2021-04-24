@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Notifications</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
+<link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="order section">
+    <div class="container">
+        <div class="row">
+               
+                <% if(notifications) { %>
+                    <% notifications.forEach(function(notif){ %>
+                        <div style="margin-right: 10px;">
+                        <div class="card text-white bg-secondary mb-5" style="max-width: 18rem;">
+                            <div class="card-header"><i class="fa fa-bell"></i></div>
+                            <div class="card-body">
+                              <p class="card-text"><%= notif.notification_content %></p>
+                              <p class="card-text">for Order Id</p>
+                              <a href="/orderdtl/<%= notif.order_id %>"><%= notif.order_id %></a>
+                            </div>
+                          </div>
+                        </div>
+                       
+                        <!-- <li class="list-group-item"></li> -->
+                    <% }); %>
+                <%} %>
+           
+          </div>
+        </div>
+      </div>
+</div>
+</div>
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+
+</script>
+</body>
+</html>

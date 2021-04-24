@@ -140,6 +140,7 @@ h5,
 #sidebar {
   min-width: 250px;
   max-width: 250px;
+  height: 1500px;
   background: #dc3545;
   color: #fff;
   -webkit-transition: all 0.3s;

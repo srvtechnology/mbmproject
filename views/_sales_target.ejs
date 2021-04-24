@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sales Target</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <link rel="shortcut icon" href="img/logo/favicon.ico"> -->
+
+<!-- local bootstrap -->
+<script src="/javascripts/webfont/webfont.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/atlantis.min.css">
+<link href="/javascripts/jquery-ui/jquery-ui.css" rel="stylesheet"/>
+<link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<!-- local style css -->
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+<%- include("./partials/_menu.ejs",{userId:userId,userType:userType,username:username,userImg:userImg}) %>
+<div class="order section">
+	<div class="container-fluid">
+		<div class="order-div section-div">
+			<h4 class="h4">Sales <span>Target</span></h4>
+			
+			<i class="dropdown-divider d-block"></i>
+			
+			<div class="col-md-12">
+		    <div class="card"></div>
+              
+		      <div class="card-body">
+                <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-danger rounded-0">Add Target</button>
+				
+
+				<form id="getsalestarget" method="post" action="/get_sales_target" style="text-align: center;">
+					<div class="row">
+						<div>
+							<select style="width: 60%; text-align: center; margin-left: 15rem; margin-top: 2rem; margin-bottom: 2rem; border-radius: 5px;" class="form-control input-sm" id="sales_month" name="sales_month" placeholder="Dealer/Distributor" >
+								<option  value="00" selected>Select Month</option>
+								<option value="01">January</option>
+								<option value="02">February</option>
+								<option value="03">March</option>
+								<option value="04">April</option>
+								<option value="05">May</option>
+								<option value="06">June</option>
+								<option value="07">July</option>
+								<option value="08">August</option>
+								<option value="09">September</option>
+								<option value="10">October</option>
+								<option value="11">November</option>
+								<option value="12">December</option>
+							</select>
+						</div>
+						<div>
+							<select style="width: 60%; text-align: center; margin-left: 10rem; margin-top: 2rem; margin-bottom: 2rem; border-radius: 5px;" class="form-control input-sm" id="sales_year" name="sales_year" placeholder="Sale Executive" >
+								<option value ="00" selected>Select Year</option>
+								<option value="2020">2020</option>
+								<option value="2021">2021</option>
+								<option value="2022">2022</option>
+							</select>
+						</div>
+						<div>
+							<button type="submit"  style="width: 60%; text-align: center; margin-left: 10rem; margin-top: 2rem; margin-bottom: 2rem; border-radius: 5px;" class="btn btn-info">Get</button>
+						</div>
+					</div>
+				</form>
+
+
+
+
+		        <div class="table-responsive">
+		          <table id="basic-datatables" class="display table table-striped table-hover" >
+		            <thead>
+		              <tr>
+						<th>User Id</th>
+						<th>Login Id</th>
+						<th>Sales Target</th>
+		                <th>Sales Achieved</th>
+		                <th>Sales Percentage</th>
+		                <th>Status</th>		
+						<th>Created On</th>
+                        <th>Updated On</th>
+                        <th>Action</th>
+
+										
+		              </tr>
+		            </thead>
+		  <tbody>
+				
+				<% if (salestargets) { %>
+					<% salestargets.forEach(function(salestarget){ %>
+
+                        <% var create_date = salestarget.CREATETIME %>
+                        <% var human_readable_date_format_createtime = new Date(create_date) %>
+                        <% var update_date = salestarget.UPDATETIME %>
+                        <% var human_readable_date_format_updatetime = new Date(update_date) %>
+				<tr>
+					<td scope="row">
+						<p><%= salestarget.user_id %></p>
+					</td>
+					<td scope="row">
+						<p><%= salestarget.USER_LOGIN_ID %></p>
+					</td>
+					<td scope="row">
+						<p><%= salestarget.SALES_TARGET %></p>
+					</td>
+                    <td scope="row">
+						<p><%= salestarget.SALES_ACHIEVED %></p>
+					</td>
+                    <td scope="row">
+                        <% if(  !salestarget.SALES_TARGET_STATUS ) { %>
+                            <p class="btn btn-primary"><%= ((salestarget.SALES_ACHIEVED/salestarget.SALES_TARGET)*100).toFixed(2) %> %</p>
+                        <% } %>
+                        <% if(  salestarget.SALES_TARGET_STATUS ) { %>
+                            <p class="btn btn-success"><%= ((salestarget.SALES_ACHIEVED/salestarget.SALES_TARGET)*100).toFixed(2) %> %</p>
+                        <% } %>
+					</td>
+                    <td scope="row">
+                        <% if(  !salestarget.SALES_TARGET_STATUS ) { %>
+						    <p class="btn btn-primary"><%= salestarget.SALES_TARGET_STATUS %></p>
+                        <% } %>
+                        <% if(  salestarget.SALES_TARGET_STATUS ) { %>
+                            <p class="btn btn-success"><%= salestarget.SALES_TARGET_STATUS %></p>
+                        <% } %>
+					</td>
+                   
+					<td><%= human_readable_date_format_createtime.toDateString()%></td>
+                    <td><%= human_readable_date_format_updatetime.toDateString()%></td>
+					<td>
+                        <form id="updatesalestarget" method="post" action="/update_sales_target">
+                            <input type="hidden" name="salesTargetId" value="<%= salestarget.id %>"/>
+                            <% if(  !salestarget.SALES_TARGET_STATUS ) { %>
+                                <button type="submit" class="btn btn-danger rounded-0">Close</button>
+                            <% } %>
+                            
+                        </form>
+                        
+					</td>
+				</tr>
+				<% }); %>
+				<%} %>
+
+		</tbody>
+		</table>
+		</div>
+		</div>
+		
+		</div>
+		</div>
+	</div>
+</div>
+</div>
+
+
+
+<div id="myModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Sales Target</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         <form id="addnewsalestarget" method="post" action="/add_sales_target">
+            <div class="row">
+                <div>
+                    <label for="dldtId" style="width: 60%; text-align: center; margin-left: 10rem;">Select Dealer/Distributor</label>
+					<select style="width: 60%; text-align: center; margin-left: 10rem; margin-bottom: 5rem;" class="form-control input-sm" id="dldtId" name="dldt" placeholder="Dealer/Distributor" onchange="onchangeDLDT()">
+					  <option value="">Choose</option>
+						 <% dldtList.forEach(function(dldt){ %>
+						  <option value="<%= dldt.USER_ID %>"><%= dldt.LOGON_ID1 %></option>
+						  <% }); %>
+					</select>
+                </div>
+                <div>
+                    <label for="seid" style="width: 60%; text-align: center; margin-left: 10rem;">Select Sales Executive</label>
+					<select style="width: 60%; text-align: center; margin-left: 10rem; margin-bottom: 5rem;" class="form-control input-sm" id="seid" name="se" placeholder="Sale Executive" onchange="onchangeSE()">
+					  <option value="">Choose</option>
+						 <% seList.forEach(function(se){ %>
+						  <option value="<%= se.USER_ID %>"><%= se.LOGON_ID1 %></option>
+						  <% }); %>
+					</select>
+                </div>
+            </div>
+                <div class="form-group" style="width: 60%; text-align: center; margin-left: 10rem;">
+					<label for="sales_target_amount" class="col-form-label"> Enter Sales Target Amount:</label>
+					<input type="number" class="form-control" id="sales_target_amount" name="sales_target_amount" value="" placeholder="Target Amount">
+				</div>
+            <button type="submit" class="btn btn-primary">Add Target</button>
+         </form>
+        </div>
+        <div class="modal-footer">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+<script src="/javascripts/fontawwesome.js"></script>
+<!-- jQuery -->
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/atlantis.min.js"></script>
+<script src="/javascripts/jquery-ui/jquery-ui.js"></script>
+<script src="/javascripts/datatables/datatables.min.js"></script>
+<!-- Popper.js -->
+<script src="/javascripts/popper.js"></script>
+<!-- Bootstrap JS -->
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/main.js"></script>
+<!-- <script src="/javascripts/vii.js"></script> -->
+<!-- app -->
+<script src="/javascripts/app.js"></script>
+<script>
+$(document).ready(function() {
+	var table = $('#basic-datatables').DataTable();
+	var order = table.order([0,'desc']).draw();
+});
+
+
+function onchangeDLDT() {
+	
+	var dldtidSelected = document.getElementById("dldtId").value;
+	console.log(dldtidSelected);
+	if(dldtidSelected != ""){
+		$('#seid').prop('disabled', true);
+	}else{
+		$('#seid').prop('disabled', false);
+	}
+}
+
+function onchangeSE(){
+	var seidSelected = document.getElementById("seid").value;
+	console.log(seidSelected);
+	if(seidSelected != ""){
+		$('#dldtId').prop('disabled', true);
+	}else{
+		$('#dldtId').prop('disabled', false);
+	}
+}
+
+</script>
+</body>
+</html>

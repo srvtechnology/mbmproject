@@ -47,11 +47,7 @@
 				<h4 class="h4">ENQUIRY <span>LIST</span></h4>
 			</div>
 			<div class="table-div" id="horizontalScroll">
-				<div class="col-md-12">
-					<div class="card">
-						
-						<div class="card-body">
-							<div class="table-responsive">
+				
 				<table id="basic-datatables" class="display table table-striped table-hover">
 			  <thead>
 			    <tr>
@@ -111,6 +107,9 @@
 				  	case 'F' : %>
 				     <a href="#" class="btn btn-primary btn-sm" disabled>Follow Up</a>
 				   <% break;
+				   case 'C' : %>
+					  <a href="#" class="btn btn-danger btn-sm" disabled>Outdated</a>
+					  <% break;
 						} %>
 			  		</td>
 						<% if (userType =='A' || userType =='HOD') { %>
@@ -156,10 +155,7 @@
 					<% }); %>
 			  </tbody>
 			</table>
-		</div>
-	</div>
-	</div>
-	</div>
+		
 	</div>
 			
 		</div>
@@ -266,6 +262,9 @@
 						<div class="col-12 text-center">
 							<span style="color: #000; ">Comment: <span style="color: dodgerblue" id="enq_comment">comment</span> </span>
 						</div>
+						<div class="col-4">
+							<span style="color: #000; ">Estimated Delivery Date: <span class="badge badge-info" style="color: #FFF" id="enq_delivery_date">20/20/2020</span> </span>
+						</div>
 					</div>
 					
 					
@@ -296,23 +295,23 @@
 <!-- app -->
 <script src="/javascripts/app.js"></script>
 <script>
-(function() {
-    function scrollHorizontally(e) {
-        e = window.event || e;
-        var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-        document.getElementById('horizontalScroll').scrollLeft -= (delta * 40); // Multiplied by 40
-        e.preventDefault();
-    }
-    if (document.getElementById('horizontalScroll').addEventListener) {
-        // IE9, Chrome, Safari, Opera
-        document.getElementById('horizontalScroll').addEventListener('mousewheel', scrollHorizontally, false);
-        // Firefox
-        document.getElementById('horizontalScroll').addEventListener('DOMMouseScroll', scrollHorizontally, false);
-    } else {
-        // IE 6/7/8
-        document.getElementById('horizontalScroll').attachEvent('onmousewheel', scrollHorizontally);
-    }
-})();
+// (function() {
+//     function scrollHorizontally(e) {
+//         e = window.event || e;
+//         var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+//         document.getElementById('horizontalScroll').scrollLeft -= (delta * 40); // Multiplied by 40
+//         e.preventDefault();
+//     }
+//     if (document.getElementById('horizontalScroll').addEventListener) {
+//         // IE9, Chrome, Safari, Opera
+//         document.getElementById('horizontalScroll').addEventListener('mousewheel', scrollHorizontally, false);
+//         // Firefox
+//         document.getElementById('horizontalScroll').addEventListener('DOMMouseScroll', scrollHorizontally, false);
+//     } else {
+//         // IE 6/7/8
+//         document.getElementById('horizontalScroll').attachEvent('onmousewheel', scrollHorizontally);
+//     }
+// })();
 
 function showEnquiryData(user) {
 	$('#carousel_list').empty();
@@ -328,6 +327,7 @@ function showEnquiryData(user) {
 	$('#enq_type').html(user_data.TYPE);
 	$('#enq_comment').html(user_data.COMMENT);
 	$('#enq_date').html(user_data.NEXTDATE);
+	$('#enq_delivery_date').html(user_data.ESTIMATED_DELIVERY_DATE);
 	$('#enq_status').html(user_data.STATUS);
 	$('#enq_company').html(user_data.company);
 	$('#enq_city').html(user_data.CITY);
@@ -405,8 +405,8 @@ function showEnquiryData(user) {
 
 }
 $(document).ready(function() {
-	$('#basic-datatables').DataTable({
-	});
+	var table = $('#basic-datatables').DataTable();
+	var order = table.order([0,'desc']).draw();
 });
 
 function getDetails(){

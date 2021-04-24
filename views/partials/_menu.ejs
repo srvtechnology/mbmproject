@@ -52,7 +52,29 @@
           </div>
         </div>
       </li>
-      <li><a href="/sparepart"><i class="fa fa-user-plus"></i> &nbsp;<span>Spare Parts</span></a></li>
+      <li><a href="/upload_products"><i class="fas fa-cog"></i> &nbsp;<span>Upload Products</span></a></li>
+      <li><a href="/rewards"><i class="fa fa-gift"></i> &nbsp;<span>Rewards</span></a></li>
+      <li><a href="/sale_target"><i class="fa fa-bullseye"></i> &nbsp;<span>Sale Target</span></a></li>
+      <!-- <li><a href="/sparepart"><i class="fa fa-user-plus"></i> &nbsp;<span>Spare Parts</span></a></li> -->
+      <li>
+        <div class="accordion" id="sparepartsettings">
+          <div class="">
+            <div class="" id="headingTwo">
+              <a data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree" class="drop-a collapsed">
+                <i class="fas fa-cog"></i> &nbsp;
+                <span>Spare Parts</span> &nbsp;
+                <i class="fa fa-chevron-up"></i>
+              </a>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#sparepartsettings">
+              <a href="/sparepart"><i class="fa fa-angle-double-right"></i> Add Spare Part</a>
+              <a href="/sparepartremove"><i class="fa fa-angle-double-right"></i> Remove Spare Part</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li><a href="/discount_and_ads"><i class="fa fa-bullhorn"></i></i> &nbsp;<span>Discount and Ads</span></a></li>
+      <li><a href="/order_payment_status"><i class="fa fa-money-bill-alt"></i></i> &nbsp;<span>Payment Status</span></a></li>
       <li><a href="/enquiry_lt"><i class="fa fa-question-circle"></i></i> &nbsp;<span>Enquiry</span></a></li>
       <li><a href="/prices"><i class="fas fa-tags"></i>&nbsp;<span>Price Management</span></a></li>
       <li><a href="/inventory"><i class="fas fa-dolly-flatbed"></i> &nbsp;<span>Inventory Management</span></a></li>
@@ -101,6 +123,8 @@
         </div>
       </div>
     </li>
+    <li><a href="/discount_and_ads"><i class="fa fa-bullhorn"></i></i> &nbsp;<span>Discount and Ads</span></a></li>
+    <li><a href="/order_payment_status"><i class="fa fa-money-bill-alt"></i></i> &nbsp;<span>Payment Status</span></a></li>
     <li><a href="/sparepart"><i class="fa fa-user-plus"></i> &nbsp;<span>Spare Parts</span></a></li>
     <li><a href="/enquiry_lt"><i class="fa fa-question-circle"></i></i> &nbsp;<span>Enquiry</span></a></li>
     <li><a href="/prices"><i class="fas fa-tags"></i>&nbsp;<span>Price Management</span></a></li>
@@ -147,6 +171,8 @@
       </div>
     </div>
   </li>
+  <li><a href="/discount_and_ads"><i class="fa fa-bullhorn"></i></i> &nbsp;<span>Discount and Ads</span></a></li>
+  <li><a href="/order_payment_status"><i class="fa fa-money-bill-alt"></i></i> &nbsp;<span>Payment Status</span></a></li>
   <li><a href="/enquiry_lt"><i class="fa fa-question-circle"></i></i> &nbsp;<span>Enquiry</span></a></li>
   <li><a href="/followup_lt"><i class="fa fa-phone-square-alt"></i></i> &nbsp;<span>Follow Up</span></a></li>
   <li><a href="/orders"><i class="fa fa-bars"></i> &nbsp;<span>Order Details</span></a></li>
@@ -188,8 +214,12 @@
     </div>
   </div>
 </li>
+<li><a href="/discount_and_ads"><i class="fa fa-bullhorn"></i></i> &nbsp;<span>Discount and Ads</span></a></li>
+<li><a href="/order_payment_status"><i class="fa fa-money-bill-alt"></i></i> &nbsp;<span>Payment Status</span></a></li>
+<li><a href="/rewards"><i class="fa fa-gift"></i> &nbsp;<span>Rewards</span></a></li>
 <li><a href="/orders"><i class="fa fa-bars"></i> &nbsp;<span>Order Details</span></a></li>
 <li><a href="/complaints"><i class="fa fa-bars"></i> &nbsp;<span>Complaints</span></a></li>
+<li><a href="/notifications"><i class="fa fa-bell"></i> &nbsp;<span>Notifications</span></a></li>
 <li><a href="/logout" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-unlock"></i> &nbsp;<span>Logout</span></a></li>
 <% break;
 
@@ -228,8 +258,12 @@ case 'DT' : %>
   </div>
 </div>
 </li>
+<li><a href="/discount_and_ads"><i class="fa fa-bullhorn"></i></i> &nbsp;<span>Discount and Ads</span></a></li>
+<li><a href="/order_payment_status"><i class="fa fa-money-bill-alt"></i></i> &nbsp;<span>Payment Status</span></a></li>
+<li><a href="/rewards"><i class="fa fa-gift"></i> &nbsp;<span>Rewards</span></a></li>
 <li><a href="/orders"><i class="fa fa-bars"></i> &nbsp;<span>Order Details</span></a></li>
 <li><a href="/complaints"><i class="fa fa-bars"></i> &nbsp;<span>Complaints</span></a></li>
+<li><a href="/notifications"><i class="fa fa-bell"></i> &nbsp;<span>Notifications</span></a></li>
 <li><a href="/logout" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-unlock"></i> &nbsp;<span>Logout</span></a></li>
 <% break;
 
@@ -240,6 +274,9 @@ case 'DT' : %>
     </div>
   </div>
   <a href="/profile" class="profile-div">
+  </a>
+  <a href="/profile" class="profile-div">
+   
     <div class="img-div">
       <img src="/images/users/<%= userImg %>" alt="<%= username %>" class="img-fluid">
     </div>
@@ -265,3 +302,4 @@ case 'DT' : %>
 </div>
 </div>
 </nav>
+

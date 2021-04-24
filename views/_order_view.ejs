@@ -9,7 +9,7 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="/stylesheets/bootstrap.css">
-
+<link rel="stylesheet" href="/snackbar/snackbar.css">
 <!-- local style css -->
 <link rel="stylesheet" href="/stylesheets/navbar.css">
 <link rel="stylesheet" href="/stylesheets/index.css">
@@ -22,6 +22,7 @@
 	<div class="container-fluid">
 		<div class="product-div section-div">
 			<h4 class="h4">ORDER <span>VIEW</span></h4>
+			<div id="snackbar"></div>
 				<table class="table">
 				  <thead class="thead-light">
 				    <tr>
@@ -39,7 +40,8 @@
 				  <tbody>
 						<% cartList.forEach(function(cart){ %>
 							<tr>
-						 	 <!-- 1 -->
+							  <!-- 1 -->
+							  <!-- <td><%=cart.CART_ID %></td> -->
 						 	 <td><%=cart.CARTDTL_ID %></td>
 						 	 <!-- 2 -->
 						 	 <td>
@@ -81,34 +83,47 @@
 				  </tbody>
 				</table>
 				<hr>
+				<% if (userType == 'SE') { %>
+					<label for="dldtId" style="width: 50%; text-align: center; margin-left: 20rem;" class="form-control input-sm">Select Dealer/Distributor</label>
+					<select style="width: 50%; text-align: center; margin-left: 20rem; margin-bottom: 5rem;" class="form-control input-sm" id="dldtId" name="dldt" placeholder="Dealer/Distributor" required>
+					  <option value="">Choose</option>
+						<% dldtList.forEach(function(dldt){ %>
+						  <option value="<%= dldt.USER_ID %>"><%= dldt.LOGON_ID1 %></option>
+						  <% }); %>
+					</select>
+					<% } %>
+					<button class="btn btn-danger">
+						<i class="fa fa-gift"></i>
+						<input id="redeem_check" type="checkbox" data-toggle="toggle">
+					</button>
+					
+
+				
+				
+				<p id="points_display"></p>
+				<p>You have: <b id="usr_reward_points"></b> Points</p>
 				<p class="cart-total right">
-				<strong>Sub-Total</strong>:	₹ &nbsp;<%= csubtotal %><br>
-				<strong>GST (17.5%)</strong>: ₹ &nbsp;<%= cvat %><br>
-				<strong>Total</strong>: ₹ &nbsp;<%= ctotal %><br>
+					<strong>Sub-Total</strong>:	₹ &nbsp;<%= csubtotal %><br>
+					<strong>GST (17.5%)</strong>: ₹ &nbsp;<%= cvat %><br>
+					<strong>Total</strong>: ₹ &nbsp;<%= ctotal %><br>
 				</p>
 				<hr/>
 				<p class="buttons center">
 				<input type="hidden" id="cartid" name="cartid" value="<%= cartid %>"/>
+				<input type="hidden" id="cart_total_value" name="cart_total_value" value="<%= ctotal %>"/>
 				<input type="hidden" id="userTypeId" name="userType" value="<%= userType %>"/>
 				<input type="hidden" id="userId" name="userId" value="<%= userId %>"/>
-				<% if (userType == 'SE') { %>
-				<label for="dldtId" class="form-control">Select Dealer/Distributor</label>
-				<select class="form-control" id="dldtId" name="dldt" placeholder="Dealer/Distributor" required>
-				  <option value="">Choose</option>
-				    <% dldtList.forEach(function(dldt){ %>
-				      <option value="<%= dldt.USER_ID %>"><%= dldt.LOGON_ID1 %></option>
-				      <% }); %>
-				</select>
-				<% } %>
+				
 				<button class="btn btn-success" type="button" onclick="checkout()" id="checkout">Order Now</button>
 				</p>
-				<div id="dialog-1" title="Member Selection">Please select Dealer/Disrtibutior</div>
+				<!-- <div id="dialog-1" title="Member Selection">Please select Dealer/Disrtibutior</div> -->
 		</div>
 	</div>
 </div>
 </div>
 
 <script src="/javascripts/fontawwesome.js"></script>
+<script src="/snackbar/snackbarScript.js"></script>
 <!-- jQuery -->
 <script src="/javascripts/jquery.js"></script>
 <!-- Popper.js -->
@@ -121,6 +136,11 @@
 <script src="/javascripts/app.js"></script>
 <script src="/javascripts/jquery-ui/jquery-ui.js"></script>
 <script>
+
+
+
+
+
 $(document).ready(function() {
   $(function() {
              $( "#dialog-1" ).dialog({
@@ -129,7 +149,136 @@ $(document).ready(function() {
           });
 });
 
+
+$('#redeem_check').click(function(){
+	if( $('#redeem_check').is(':checked'))
+	{
+		redeemPointAdded();
+		
+	}else{
+		redeemPointRemoved();
+	}
+	
+	setTimeout(
+		function(){
+			if( $('#redeem_check').is(':checked'))
+	{
+		var redeem_status = true;
+		var points = 50;
+		var total = jQuery('#cart_total_value').val();
+		var cart_id = jQuery('#cartid').val();
+
+		console.log(jQuery('#cartid').val());
+		console.log(jQuery('#cart_total_value').val());
+		$.ajax({
+			type:'POST',
+			url:'/updatecarttotal',
+			data:{
+				'points':points,
+				'total': total,
+				'cart_id': cart_id,
+				'redeem_status':redeem_status
+			},
+			success: function(data) {
+				console.log(data);
+					$.ajax({
+					type:'POST',
+					url:'/updaterewardpoints',
+					data:{
+						'points':points,
+						'redeem_status':redeem_status
+					},
+					success: function(data) {
+						console.log(data);
+						
+					},
+					error: function(err){
+						console.log(err);
+					},
+					complete: function(res){
+						location.reload();
+					}
+				});
+			},
+			error: function(err){
+				console.log(err);
+			},
+			complete: function(res){
+				
+			}
+		});
+		//end of ajax
+	}else{
+		var redeem_status = false;
+		var points = 50;
+		var total = jQuery('#cart_total_value').val();
+		var cart_id = jQuery('#cartid').val();
+
+		console.log(jQuery('#cartid').val());
+		console.log(jQuery('#cart_total_value').val());
+			$.ajax({
+				type:'POST',
+				url:'/updatecarttotal',
+				data:{
+					'points':points,
+					'total': total,
+					'cart_id': cart_id,
+					'redeem_status':redeem_status
+				},
+				success: function(data) {
+					console.log(data);
+					$.ajax({
+					type:'POST',
+					url:'/updaterewardpoints',
+					data:{
+						'points':points,
+						'redeem_status':redeem_status
+					},
+					success: function(data) {
+						console.log(data);
+					},
+					error: function(err){
+						console.log(err);
+					},
+					complete: function(res){
+						location.reload();
+					}
+				});
+			},
+			error: function(err){
+				console.log(err);
+			},
+			complete: function(res){
+				
+			}
+		});
+		//end of ajax
+	}
+		}, 2000)
+	
+
+});
+
+jQuery.ajax({
+ url: '/getrewardpoints',
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(result){
+	console.log(result.data);
+	if(result.data > 50)
+	{
+		$('#points_display').html('Redeem 50 points from your Rewards');
+	}else {
+		$('#points_display').html('You dont have sufficient Points');
+	}
+	
+	$('#usr_reward_points').html(result.data);
+    }
+  });
+
+
 function checkout(){
+	placingOrder();
   var cartId=jQuery('#cartid').val();
   var userType=jQuery('#userTypeId').val();
   var memberFor=jQuery('#userId').val();
@@ -140,7 +289,7 @@ function checkout(){
     }
   }
   jQuery.ajax({
- url: 'http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/regAct/place_order/cartId/'+cartId+'/memberFor/'+memberFor,
+ url: '/regAct/place_order/cartId/'+cartId+'/memberFor/'+memberFor,
   contentType: "application/json",
   dataType: 'json',
   success: function(result){
@@ -152,7 +301,7 @@ function updateCart(prdId,price,cartId,cartdtlId){
 	console.log("hii")
 var qty=jQuery('#qty_input_'+cartdtlId).val();
   jQuery.ajax({
-  url: 'http://mbmchairs-env.eba-mz8cbctk.ap-south-1.elasticbeanstalk.com/regAct/updateCart/prd/'+prdId+'/qty/'+qty+'/price/'+price+'/cartId/'+cartId+'/cartDtlId/'+cartdtlId,
+  url: '/regAct/updateCart/prd/'+prdId+'/qty/'+qty+'/price/'+price+'/cartId/'+cartId+'/cartDtlId/'+cartdtlId,
   contentType: "application/json",
   dataType: 'json',
   success: function(result){

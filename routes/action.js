@@ -4,7 +4,10 @@ var db = require('../config/database');
 var emailer = require('../config/emailers');
 var const_data = require('../config/const');
 var data;
-
+global.RewardsPoints = 0;
+global.RewardCostPoint = 0;
+global.cartTotal = 0;
+global.existingRewardPoint = 0;
 (function () {
   db.query('select topcategoryid,identifier,name,field1,field2 from topcategory  where ?',{status: '1'}, function(err,result) {
       if (err) throw err;
@@ -111,10 +114,62 @@ router.get('/updateCart/prd/:prdId/qty/:qty/price/:price/cartId/:cartId/cartDtlI
           && sess.user_type !='SE'){
       res.json({'updated':false});
       }else{
-        var orderSQL="insert into orders(address_id,member_id,MEMBER_ID_FOR,status,TAX,DISCOUNT,TOTAL,FIELD1,CREATETIME) value("+
+        var getExistingRewardPoint = "SELECT usr_reward_points FROM user WHERE USER_ID ="+sess.user_id+"";
+        db.query(getExistingRewardPoint, function(err, result){
+          if(err)
+          {
+            throw err;
+          }
+          global.existingRewardPoint = result[0].usr_reward_points;
+        });
+         var getRewardPointsQuery = "SELECT reward_point,cost_per_reward FROM rewards WHERE id = 1";
+        
+         db.query(getRewardPointsQuery, function(err, result){
+          if(err)
+          {
+            throw err;
+          }
+          console.log(result);
+          global.RewardsPoints = result[0].reward_point;
+          global.RewardCostPoint = result[0].cost_per_reward;
+          console.log(global.RewardsPoints);
+          console.log(global.RewardCostPoint);
+          var getCartTotal = "select TOTAL from cart WHERE CART_ID="+cartId+"";
+         db.query(getCartTotal, function(err, result){
+          if(err)
+          {
+            throw err;
+          }
+          console.log(result);
+          global.cartTotal = result[0].TOTAL;
+          
+          console.log(global.cartTotal);
+          var totalrewardpoints = (global.cartTotal / global.RewardCostPoint) * global.RewardsPoints;
+          console.log(global.RewardsPoints);
+          console.log(global.RewardCostPoint);
+          console.log(totalrewardpoints);
+          totalrewardpoints = Math.ceil(totalrewardpoints)+global.existingRewardPoint;
+
+          var updateRewardPoints = "UPDATE user SET usr_reward_points = "+totalrewardpoints+" WHERE USER_ID ="+sess.user_id+"";
+          db.query(updateRewardPoints, function(err, result){
+            if(err)
+            {
+              throw err;
+            }
+            console.log(result);
+           
+          });
+         });
+         });
+
+         
+
+         
+         
+        var orderSQL="insert into orders(address_id,member_id,MEMBER_ID_FOR,status,TAX,DISCOUNT,TOTAL,FIELD1,CREATETIME, REDEEM_POINTS) value("+
         "(select address_id from address where MEMBER_ID="+memberFor+" AND ADDRESSFOR='SB'),"+sess.user_id+","+memberFor+",'P', "+
         " (select FIELD2 from cart WHERE CART_ID="+cartId+"),'', "+
-        " (select TOTAL from cart WHERE CART_ID="+cartId+"),(select FIELD1 from cart WHERE CART_ID="+cartId+"),CURRENT_TIMESTAMP)";
+        " (select TOTAL from cart WHERE CART_ID="+cartId+"),(select FIELD1 from cart WHERE CART_ID="+cartId+"),CURRENT_TIMESTAMP, (select REDEEM_POINTS from cart WHERE CART_ID="+cartId+"))";
         db.query(orderSQL, function(err,result) {
           if (err)
          {

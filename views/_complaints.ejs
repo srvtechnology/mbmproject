@@ -24,9 +24,9 @@
 <div class="order section">
 	<div class="container-fluid">
 		<div class="order-div section-div">
-			<h4 class="h4">Complaints <span>DETAILS</span></h4>
+			<!-- <h4 class="h4">Complaints <span>DETAILS</span></h4> -->
 			<!-- button div -->
-			<div class="btn-group btn-group-toggle w-100 mt-2 shadow">
+			<!-- <div class="btn-group btn-group-toggle w-100 mt-2 shadow">
 				<input value="0" type="radio" name="leg" id="option0" onclick="filter('0')" checked>
 				<label class="btn-sm btn btn-light" for="option0">
 					All
@@ -51,7 +51,7 @@
 				<label class="btn-sm btn btn-light" for="option5">
 					Shipped
 				</label>
-			</div>
+			</div> -->
 			<i class="dropdown-divider d-block"></i>
 			<!-- <div class="form-group filter-div row">
 				<div class="col-12 text-left">
@@ -87,10 +87,10 @@
 		                <th>Date</th>
 		                <!-- <th>Total Value</th> -->
 		                <th>Status</th>
-										<% if (userType != 'SE') { %>
-                                  <th>Action</th>
-                                  <th>View</th>
+										<% if (userType == 'A') { %>
+                                  		<th>Action</th>
 										<% } %>
+										<th>View</th>
 		              </tr>
 		            </thead>
 		  <tbody>
@@ -273,16 +273,18 @@
 					<td>
 						<p class="td-status rejected"><%= ord_status %></p>
 					</td>
+					<% if (userType == 'A') { %>
 					<td>
-						<% if (userType != 'SE') { %>
+						
 	 <button type="button" onclick="openModel('<%= order.order_id %>','<%= options %>')" class="btn btn-success rounded-0">Update</button>
 							<% switch (order.STATUS) {
 							 case 'S' : %>
 							<a href="/geninvoice/id/<%= order.order_id %>" target="_blank" class="btn btn-primary btn-sm" disabled>Generate Invoice</a>
 							<% break;
 							 } %>
-						<% } %>
-                    </td>
+						
+					</td>
+					<% } %>
                     <td>
                         <button type="button" onclick="openComplaints('<%= order.order_id %>','<%= order.order_qty_complain %>','<%= order.order_qa_complain %>', '<%= order.order_delivery_complain %>')" class="btn btn-primary rounded-0">View</button>
                     </td>
@@ -426,8 +428,8 @@ function updateShipData(){
   }
 }
 $(document).ready(function() {
-	$('#basic-datatables').DataTable({
-	});
+	var table = $('#basic-datatables').DataTable();
+	var order = table.order([0,'desc']).draw();
 });
 </script>
 </body>

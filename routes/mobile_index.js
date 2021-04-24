@@ -1378,6 +1378,7 @@ router.post('/consolelogin', function(req,res,next){
             console.log(createdate);
             var followUpDate=fields.followUpDate;
             var exeComment=fields.exeComment;
+            var estimated_delivery_date = fields.estimated_delivery_date;
             const buf = Buffer.from(password);
             var base64passkey=buf.toString('base64');
 
@@ -1390,9 +1391,9 @@ router.post('/consolelogin', function(req,res,next){
                   address_id = result.insertId;
                   console.log(result.insertId);
                   console.log(address_id);
-                  var insertEnquiryDetailsQuery = "insert into enquiry(USER_ID,STATUS,CREATEDATE,NAME,TYPE,QTY,QTY_2,QTY_3,QTY_4,QTY_5,PRICE,PRICE_2,PRICE_3,PRICE_4,PRICE_5,IMAGE1,IMAGE2,IMAGE3,IMAGE4,IMAGE5,IMAGE6,COMMENT,ISNEW,NEXTDATE,ADDRESS_ID)"+
+                  var insertEnquiryDetailsQuery = "insert into enquiry(USER_ID,STATUS,CREATEDATE,NAME,TYPE,QTY,QTY_2,QTY_3,QTY_4,QTY_5,PRICE,PRICE_2,PRICE_3,PRICE_4,PRICE_5,IMAGE1,IMAGE2,IMAGE3,IMAGE4,IMAGE5,IMAGE6,COMMENT,ISNEW,NEXTDATE,ADDRESS_ID,ESTIMATED_DELIVERY_DATE)"+
                   "value('"+userId+"','P','"+createdate+"','Enquiry',"+
-                  "'"+enqType+"','"+prdQty_1+"','"+prdQty_2+"','"+prdQty_3+"','"+prdQty_4+"','"+prdQty_5+"','"+prdPrice_1+"','"+prdPrice_2+"','"+prdPrice_3+"','"+prdPrice_4+"','"+prdPrice_5+"','"+catalogImage+"','"+imageName1+"','"+imageName2+"','"+imageName3+"','"+imageName4+"','"+imageName5+"','"+exeComment+"','N','"+followUpDate+"','"+address_id+"');";
+                  "'"+enqType+"','"+prdQty_1+"','"+prdQty_2+"','"+prdQty_3+"','"+prdQty_4+"','"+prdQty_5+"','"+prdPrice_1+"','"+prdPrice_2+"','"+prdPrice_3+"','"+prdPrice_4+"','"+prdPrice_5+"','"+catalogImage+"','"+imageName1+"','"+imageName2+"','"+imageName3+"','"+imageName4+"','"+imageName5+"','"+exeComment+"','N','"+followUpDate+"','"+address_id+"','"+estimated_delivery_date+"');";
 
                   db.query(insertEnquiryDetailsQuery,function(err,result) {
                       if (err) {
@@ -1615,7 +1616,7 @@ router.post('/consolelogin', function(req,res,next){
         router.get('/followup/userId/:userId/userType/:userType', function(req, res, next){
           var userId=req.params.userId;
           var userType=req.params.userType;
-          var query="select t1.ENQUIRY_ID, t1.TYPE, t1.STATUS, t1.NEXTDATE, t1.COMMENT,t2.FIRSTNAME, t2.LASTNAME, t2.ADDRESSLINE1,"+
+          var query="select t1.ENQUIRY_ID, t1.TYPE, t1.STATUS, t1.NEXTDATE, t1.CREATEDATE,t1.COMMENT,t2.FIRSTNAME, t2.LASTNAME, t2.ADDRESSLINE1,"+
           " t2.MOBILE1 from enquiry t1, address t2 where t1.USER_ID = t2.member_id; ";
           db.query(query, function(err,result) {
               if (err) {
@@ -1644,6 +1645,19 @@ router.post('/consolelogin', function(req,res,next){
 
         });
         
+        /* update enquiry status  to close*/
+        router.get('/updateenquirystatus/:enquiry', function(req, res, next){
+          var enquiry_id = req.params.enquiry;
+          var query = "update enquiry set STATUS = 'C' where ENQUIRY_ID = '"+enquiry_id+"'";
+          db.query(query, function(err,result) {
+            if (err) {
+              throw err;
+              res.json({'isError':true});
+            }
+            res.json({'isError':false,'Enquiry':{result}});
+          });
+        });
+
          /* GET state data. */
         router.get('/getstate/country/:country', function(req, res, next) {
           var country=req.params.country;
@@ -1713,9 +1727,82 @@ router.post('/consolelogin', function(req,res,next){
                 res.json({'isError':false,'Complaint':{result}});
                 });
             });
-        
+
+          
+
+            router.get('/discount_and_ads', function(req, res, next) {
+              
+              var get_discount_and_ads_query = "SELECT * FROM discount_ads";
+              db.query(get_discount_and_ads_query, function(err, results){
+                if(err) {
+                  throw err;
+                  res.json({'isError':true});
+                }
+                res.json({'isError':false,'DiscountAds':{results}});
+              });
+              
+            });
         
 
+            /* payment status  api */
+router.get('/order_payment_status/userId/:userId/userType/:userType', function(req, res, next) {
+  var userId=req.params.userId;
+  var userType=req.params.userType;
+  var orderSQ="";
+  
+    
+      if(userType =='DT' || userType =='DL'){
+         orderSQL="select a.order_id,a.status,a.MEMBER_ID,a.MEMBER_ID_FOR,a.PAYMENT_DUE_DAYS_COUNT,a.PAYMENT_CLEARANCE_STATUS,a.UPDATETIME, c.FIRSTNAME,c.LASTNAME,c.EMAIL1,c.MOBILE1,c.MOBILE1CODE,c.PHONE1,"+
+        " c.company,c.gstin,c.AADHAARID,c.VOTERID,c.DL,c.PANNO,c.PASSPORTID,c.ADDRESSLINE1,c.ADDRESSFOR,c.ADDRESSTYPE,a.CREATETIME,a.UPDATETIME,a.TOTAL "+
+        " ,c.city,c.state,c.COUNTRY,c.zipcode,d.USER_ID AS CUSER_ID,d.LOGON_ID1 AS CLOGON_ID1,e.FIRSTNAME as CFIRSTNAME,e.LASTNAME as CLASTNAME from orders a "+
+         " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for "+
+         " join user d on d.USER_ID=a.member_id join address e on e.member_id=d.USER_ID "+
+         " where c.member_id="+userId+" and a.STATUS = 'D' order by a.CREATETIME desc";
+      }else if(userType =='SE'){
+        orderSQL="select a.order_id,a.status,a.MEMBER_ID,a.MEMBER_ID_FOR,a.PAYMENT_DUE_DAYS_COUNT,a.PAYMENT_CLEARANCE_STATUS,a.UPDATETIME,c.FIRSTNAME,c.LASTNAME,c.EMAIL1,c.MOBILE1,c.MOBILE1CODE,c.PHONE1,"+
+        " c.company,c.gstin,c.AADHAARID,c.VOTERID,c.DL,c.PANNO,c.PASSPORTID,c.ADDRESSLINE1,c.ADDRESSFOR,c.ADDRESSTYPE,a.CREATETIME,a.UPDATETIME,a.TOTAL "+
+        " ,c.city,c.state,c.COUNTRY,c.zipcode,d.USER_ID AS CUSER_ID,d.LOGON_ID1 AS CLOGON_ID1,e.FIRSTNAME as CFIRSTNAME,e.LASTNAME as CLASTNAME from orders a "+
+        " join address c on c.address_id=a.address_id and c.member_id=a.member_id_for "+
+        " join user d on d.USER_ID=a.member_id_for join address e on e.member_id=d.USER_ID "+
+        " where a.member_id="+userId+" and a.STATUS = 'D' order by a.CREATETIME desc";
+      }
+       db.query(orderSQL, function(err,result) {
+           if (err) {
+             throw err;
+             
+           }
+           res.json({'isError':false,'PaymentStatus':{result}});
+            
+         });
+    
+  
+});
+
+/* notification api */
+router.get('/notifications/userId/:userId', function(req, res, next) {
+  var userId = req.params.userId;
+  var get_notifications_query = "select * from notifications where user_id="+userId+"";
+  db.query(get_notifications_query, function(err, result){
+    if (err) {
+      throw err;
+    }
+    res.json({'isError':false,'Notifications':{result}});
+  });
+  
+});
+        
+/* get sales target */
+router.get('/salestarget/userId/:userId', function(req, res, next) {
+  var userId = req.params.userId;
+  var get_notifications_query = "select * from sales_target where user_id="+userId+" and SALES_TARGET_STATUS = 0";
+  db.query(get_notifications_query, function(err, result){
+    if (err) {
+      throw err;
+    }
+    res.json({'isError':false,'SalesTarget':{result}});
+  });
+  
+});
 
         
 
